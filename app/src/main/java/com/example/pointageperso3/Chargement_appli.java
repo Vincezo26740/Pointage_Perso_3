@@ -35,7 +35,8 @@ public class Chargement_appli extends AppCompatActivity {
         public void run() {
             ImportBDDInfos importInformationAppli = new ImportBDDInfos(finDuTravaildImport);
             TextView affichageText = findViewById(R.id.chargement_app_text);
-            String chargementConfig = "Chargement Logiciel\nChargement de la configuration";
+            String chargementConfig = "Chargement Logiciel\n" +
+                    "Chargement de la configuration";
             String chargementConfigUser = "Chargement Logiciel\n" +
                     "Chargement de la configuration\n" +
                     "Chargement utilisateurs";
@@ -75,8 +76,10 @@ public class Chargement_appli extends AppCompatActivity {
                 }
             } while (finDuTravaildImport.getCount() != 0);
 
+            runOnUiThread(() -> affichageText.setText("Fin du chargement de l'application"));
+
             try {
-                Thread.sleep(1000);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

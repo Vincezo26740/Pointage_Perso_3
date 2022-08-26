@@ -1,7 +1,6 @@
 package Threads;
 
-import com.example.pointageperso3.EcranDeConnexion;
-import com.example.pointageperso3.infosAppliTest;
+import com.example.pointageperso3.DonneesDeLApplication;
 
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
@@ -23,7 +22,7 @@ public class ImportBDDInfos implements Runnable {
     ArrayList<User> listeDesUtilisateurs;
     ArrayList<Pointage> listeDePointages;
     ArrayList<Lieu> listeDeLieux;
-    infosAppliTest recupInfos = new infosAppliTest();
+
 
     public ImportBDDInfos(CountDownLatch finDesImports
     ) {
@@ -32,6 +31,7 @@ public class ImportBDDInfos implements Runnable {
 
     @Override
     public void run() {
+
         PersoDatabase accesDatabase = AccesBDD.getConnexionBDD();
 
         confAppli = accesDatabase.DaoConfigAppli().presenceConfig();
@@ -79,12 +79,12 @@ public class ImportBDDInfos implements Runnable {
         }
         finDuTravaildImport.countDown();
         accesDatabase.close();
-        recupInfos.setConfAppli(confAppli);
-        recupInfos.setUtilisateur(utilisateur);
-        recupInfos.setSociete(societe);
-        recupInfos.setListeDesUtilisateurs(listeDesUtilisateurs);
-        recupInfos.setListeDePointages(listeDePointages);
-        recupInfos.setListeDeLieux(listeDeLieux);
+        DonneesDeLApplication.setConfAppli(confAppli);
+        DonneesDeLApplication.setUtilisateur(utilisateur);
+        DonneesDeLApplication.setSociete(societe);
+        DonneesDeLApplication.setListeDesUtilisateurs(listeDesUtilisateurs);
+        DonneesDeLApplication.setListeDePointages(listeDePointages);
+        DonneesDeLApplication.setListeDeLieux(listeDeLieux);
     }
 
 }

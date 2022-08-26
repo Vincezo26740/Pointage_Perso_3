@@ -294,6 +294,7 @@ public class MajMDP extends AppCompatActivity {
     Thread creationInfoConfigPremiereFois = new Thread(() -> {
         PersoDatabase accesBddConfig1Fois = AccesBDD.getConnexionBDD();
         ConfigAppli applicationParametrage = new ConfigAppli();
+        applicationParametrage.setFirstUse(false);
         accesBddConfig1Fois.DaoConfigAppli().insertConfig(applicationParametrage);
         accesBddConfig1Fois.close();
     });
@@ -302,6 +303,7 @@ public class MajMDP extends AppCompatActivity {
         userRecup.setPW(BCrypt.withDefaults().hashToString(12, passWord1.toCharArray()));
         PersoDatabase majMDP = AccesBDD.getConnexionBDD();
         majMDP.DaoUser().updateUser(userRecup);
+        majMDP.close();
         chgtMdpLatch.countDown();
     });
 }

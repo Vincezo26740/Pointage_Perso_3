@@ -8,7 +8,7 @@ import Entity.Pointage;
 import Entity.Societe;
 import Entity.User;
 
-public class infosAppliTest {
+public class DonneesDeLApplication {
 
     static User utilisateur;
     static Societe societe;
@@ -17,14 +17,14 @@ public class infosAppliTest {
     static ArrayList<Pointage> listeDePointages;
     static ArrayList<Lieu> listeDeLieux;
 
-    public infosAppliTest(){}
+    public DonneesDeLApplication(){}
 
     public static User getUtilisateur() {
         return utilisateur;
     }
 
     public static void setUtilisateur(User utilisateur) {
-        infosAppliTest.utilisateur = utilisateur;
+        DonneesDeLApplication.utilisateur = utilisateur;
     }
 
     public static Societe getSociete() {
@@ -32,7 +32,7 @@ public class infosAppliTest {
     }
 
     public static void setSociete(Societe societe) {
-        infosAppliTest.societe = societe;
+        DonneesDeLApplication.societe = societe;
     }
 
     public static ConfigAppli getConfAppli() {
@@ -40,7 +40,7 @@ public class infosAppliTest {
     }
 
     public static void setConfAppli(ConfigAppli confAppli) {
-        infosAppliTest.confAppli = confAppli;
+        DonneesDeLApplication.confAppli = confAppli;
     }
 
     public static ArrayList<User> getListeDesUtilisateurs() {
@@ -48,7 +48,7 @@ public class infosAppliTest {
     }
 
     public static void setListeDesUtilisateurs(ArrayList<User> listeDesUtilisateurs) {
-        infosAppliTest.listeDesUtilisateurs = listeDesUtilisateurs;
+        DonneesDeLApplication.listeDesUtilisateurs = listeDesUtilisateurs;
     }
 
     public static ArrayList<Pointage> getListeDePointages() {
@@ -56,7 +56,7 @@ public class infosAppliTest {
     }
 
     public static void setListeDePointages(ArrayList<Pointage> listeDePointages) {
-        infosAppliTest.listeDePointages = listeDePointages;
+        DonneesDeLApplication.listeDePointages = listeDePointages;
     }
 
     public static ArrayList<Lieu> getListeDeLieux() {
@@ -64,6 +64,6 @@ public class infosAppliTest {
     }
 
     public static void setListeDeLieux(ArrayList<Lieu> listeDeLieux) {
-        infosAppliTest.listeDeLieux = listeDeLieux;
+        DonneesDeLApplication.listeDeLieux = listeDeLieux;
     }
 }

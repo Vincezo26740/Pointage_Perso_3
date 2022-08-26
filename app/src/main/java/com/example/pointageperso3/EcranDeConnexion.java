@@ -23,7 +23,6 @@ import Entity.Lieu;
 import Entity.Pointage;
 import Entity.Societe;
 import Entity.User;
-import Threads.ImportBDDInfos;
 
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
@@ -66,12 +65,12 @@ public class EcranDeConnexion extends AppCompatActivity {
         CDLAttenteAutorisation = new CountDownLatch(1);
         CDLAjoutUser = new CountDownLatch(1);
 // ***** ////  récupération de données récupérées par le chargement de l'application et infos appliTest  /// ***
-        utilisateur = infosAppliTest.getUtilisateur();
-        societe = infosAppliTest.getSociete();
-        confAppli = infosAppliTest.getConfAppli();
-        listeDesUtilisateurs = infosAppliTest.getListeDesUtilisateurs();
-        listeDePointages = infosAppliTest.getListeDePointages();
-        listeDeLieux = infosAppliTest.getListeDeLieux();
+        utilisateur = DonneesDeLApplication.getUtilisateur();
+        societe = DonneesDeLApplication.getSociete();
+        confAppli = DonneesDeLApplication.getConfAppli();
+        listeDesUtilisateurs = DonneesDeLApplication.getListeDesUtilisateurs();
+        listeDePointages = DonneesDeLApplication.getListeDePointages();
+        listeDeLieux = DonneesDeLApplication.getListeDeLieux();
 // ***** ////  récupération de données récupérées par le chargement de l'application et infos appliTest  /// ***
 
     }
