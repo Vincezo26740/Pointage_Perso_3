@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.pointageperso3">
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
+
+    <application
+        android:name=".MonAppContext"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/nom_application"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.PointagePerso3"
+        tools:targetApi="31">
+
+        <!--        Provider pour l'échange de fichier lors d'un Intent sur les mail-->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.pointageperso3.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
+        <activity
+            android:name=".Chargement_appli"
+            android:exported="true"
+            android:rotationAnimation="rotate"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            tools:ignore="LockedOrientationActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".PointageFunction"
+            android:exported="true"
+            android:rotationAnimation="rotate"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".Parametres"
+            android:exported="true"
+            android:rotationAnimation="rotate"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".EcranDeConnexion"
+            android:exported="true"
+            android:rotationAnimation="rotate"
+            android:screenOrientation="sensorPortrait" />
+
+        <activity
+            android:name=".MajMDP"
+            android:exported="true"
+            android:rotationAnimation="rotate"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".AjoutDeLieu"
+            android:exported="true"
+            android:rotationAnimation="rotate"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Attente_affichage"
+            android:exported="true"
+            android:rotationAnimation="rotate"
+            android:screenOrientation="sensorPortrait" />
+
+    </application>
+
+</manifest>

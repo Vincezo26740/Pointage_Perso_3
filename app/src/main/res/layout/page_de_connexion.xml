@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginHorizontal="15dp"
+    android:layout_marginVertical="5dp"
+    android:background="@drawable/_background_general"
+    tools:context=".EcranDeConnexion">
+
+    <RelativeLayout
+        android:id="@+id/page_connexion_init"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/tv_bonjour"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/Bonjour"
+            android:textAlignment="center"
+            android:textColor="#735B09"
+            android:textSize="40sp"
+            android:textStyle="bold">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/tv_username"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_bonjour"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:text="@string/utilisateur"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
+
+        <EditText
+            android:id="@+id/et_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_username"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:autofillHints="username"
+            android:background="@drawable/_background_general"
+            android:defaultFocusHighlightEnabled="true"
+            android:hint="@string/utilisateur"
+            android:inputType="text"
+            android:minHeight="48dp"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textColorHint="#735B09" />
+
+
+        <TextView
+            android:id="@+id/tv_mdp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/et_username"
+            android:layout_marginTop="30dp"
+            android:text="@string/mot_de_passe"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
+
+        <LinearLayout
+            android:id="@+id/LL_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_mdp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/et_mdp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:autofillHints="password"
+                android:background="@drawable/_background_general"
+                android:hint="@string/mot_de_passe"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:minHeight="48dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textColorHint="#735B09" />
+
+            <Button
+                android:id="@+id/btn_view_mdp"
+                android:layout_width="40sp"
+                android:layout_height="30sp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/invisibility_mdp_noir"
+                android:foreground="@drawable/invisibility_mdp_noir" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_validation_connexion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/LL_3"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/bouton_par_vert"
+            android:paddingHorizontal="25dp"
+            android:paddingVertical="15dp"
+            android:text="@string/connexion"
+            android:textSize="30sp"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/tv_oublieMdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btn_validation_connexion"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="25dp"
+            android:text="@string/mot_de_passe_oublier"
+            android:textColor="#735B09"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

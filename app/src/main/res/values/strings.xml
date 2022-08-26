@@ -1,0 +1,86 @@
+<resources>
+    <string name="nom_application">Je pointe mes lieux de travail</string>
+
+    <string name="Bonjour">Bonjour !</string>
+    <string name="utilisateur">Utilisateur</string>
+    <string name="mot_de_passe">Mot de passe</string>
+    <string name="validation_identifiants">Valider mes identifiants</string>
+    <string name="bonjour_accueil">Bonjour !</string>
+    <string name="dossier_chantier">Dossier de chantier</string>
+    <string name="planning" translatable="false">Planning</string>
+    <string name="titre_pointage">Pointage</string>
+    <string name="absence">Absence</string>
+    <string name="debut">Début</string>
+    <string name="fin">Fin</string>
+    <string name="pointageFait">Pointage réalisés</string>
+    <string name="mot_de_passe_2">Controle du mot de passe</string>
+    <string name="mot_de_passe_oublier">Mot de passe oublier</string>
+    <string name="TAG" translatable="false">********* controle Fonctionnement VV *********</string>
+    <string name="envoie_des_pointages">Envoie des pointages</string>
+    <string name="pointage_debut">Début Pointage</string>
+    <string name="fin_depointage">Fin de pointage</string>
+    <string name="controle_des_pointages">Contrôle des pointages</string>
+    <string name="pointage_abscence">Pointage abscence</string>
+    <string name="detaillez_les_raisons_de_votre_absence">Détaillez les raisons de votre absence</string>
+    <string name="valider">valider</string>
+    <string name="date_du_jour">Date</string>
+    <string name="je_serais_absent_pour_raison">Je serais absent pour raison :</string>
+    <string name="absence_raison_maladie">MALADIE</string>
+    <string name="absence_raison_personnelle">PERSONNELLE</string>
+    <string name="absence_raison_autre">AUTRE</string>
+    <string name="demande_de_congees_texte">Demande de congées</string>
+    <string name="veuillez_patientez">Veuillez patientez</string>
+    <string name="titre_lieux">Lieux</string>
+    <string name="nom_de_la_societe">Nom de la société</string>
+    <string name="adresse">Adresse</string>
+    <string name="code_postal">Code Postal</string>
+    <string name="ville">Ville</string>
+    <string name="changement_de_mot_de_passe">Changement de mot de passe</string>
+    <string name="nom_de_l_utilisateur_du_compte">Nom de l\'utilisateur du compte</string>
+    <string name="validation_du_mot_de_passe">Validation du mot de passe</string>
+    <string name="REGEX_longeur_de_mot">Longeur de mot</string>
+    <string name="REGEX_2_caract_res_speciaux">2 caractères speciaux</string>
+    <string name="REGEX_2_majuscules">2 majuscules</string>
+    <string name="REGEX_2_chiffres">2 chiffres</string>
+    <string name="creation_de_compte">Bonjour, créer votre compte.\n Merci</string>
+    <string name="nom">Nom</string>
+    <string name="prenom">Prénom</string>
+    <string name="e_mail" translatable="false">E-mail</string>
+    <string name="test" translatable="false">test</string>
+    <string name="connexion">Connexion</string>
+    <string name="titre_parametrages">Paramétrages</string>
+    <string name="parametres_utilisateur">Paramètres utilisateur</string>
+    <string name="parametres_societe">Paramètres Société</string>
+    <string name="parametres_lieu">Paramètres Lieu</string>
+    <string name="e_mail1" translatable="false">E-mail 1</string>
+    <string name="e_mail2" translatable="false">E-mail 2</string>
+    <string name="e_mail3" translatable="false">E-mail 3</string>
+    <string name="actuellement_je_suis">Actuellement, je suis :</string>
+    <string name="a_l_entreprise">à l\'ENTREPRISE</string>
+    <string name="au_lieu">au LIEU</string>
+    <string name="en_pause">PAUSE</string>
+    <string name="autre">AUTRE</string>
+    <string name="lieux_disponibles">Lieux disponibles</string>
+    <string name="ajout_de_lieu">Ajout de Lieu</string>
+    <string name="j_ai_fini_et_part">J\'ai fini et part:</string>
+    <string name="fin_de_journee">FIN DE JOURNEE</string>
+    <string name="autres_raisons">AUTRES RAISONS</string>
+    <string name="autre_type_de_pointage">Autre type \n de pointage</string>
+    <string name="description_autre_pointage">Mettez l\'endroit et la raison de votre pointage autre. Merci Bonne journée</string>
+    <string name="pas_de_pointage">Pas de pointages</string>
+    <string name="testaffichage" translatable="false">testAffichage</string>
+    <string name="corps_fichier_csv">Pointage horaires de</string>
+    <string name="titre_chooser_application_mail">Choix de l\'application pour envoyer l\'e-mail de pointage</string>
+    <string name="justification_absence">Justifier votre absence AUTRE, Merci</string>
+    <string name="dates_demandes_congees">Mettez vos dates désirées, Merci</string>
+    <string name="pointe_le">Pointé le</string>
+    <string name="maladie_ou_congee">Maladie ou demande de Conge</string>
+    <string name="a_controler">A contrôler</string>
+    <string name="lieux_de_pointage">Lieu de pointage :</string>
+    <string name="entreprise" translatable="false">Entreprise</string>
+    <string name="commentaires">Commentaires :</string>
+    <string name="dernier_mointage_fait">Dernier pointage réalisé \\n</string>
+    <string name="prenom_utilisateur">Prénom Utilisateur</string>
+    <string name="separateur_fichier">,</string>
+    <string name="mise_a_la_ligne_fichier" translatable="false">\n</string>
+</resources>

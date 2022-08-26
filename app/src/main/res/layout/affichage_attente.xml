@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/attente_connexion"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/_background_general"
+        android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/tv_wait"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/veuillez_patientez"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:layout_marginTop="50dp"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/wait_rotation"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/cercle"
+            android:textColor="@color/black"
+            android:textSize="50sp" />
+
+    </RelativeLayout>
+</RelativeLayout>

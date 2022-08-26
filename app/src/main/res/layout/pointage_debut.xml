@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/_background_general">
+
+    <RelativeLayout
+        android:id="@+id/RL_debut"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/_background_general">
+
+        <LinearLayout
+            android:id="@+id/LL_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical">
+
+            <Button
+                android:id="@+id/btn_Retour"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/retour"
+                android:foreground="@drawable/retour" />
+
+            <TextView
+                android:id="@+id/tv_PointageDate"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/date_du_jour"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_PointageDetailCommentaire"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/LL_date"
+            android:layout_centerHorizontal="true"
+            android:paddingTop="10dp"
+            android:text="@string/actuellement_je_suis"
+            android:textColor="@color/green"
+            android:textSize="20sp" />
+
+        <RadioGroup
+            android:id="@+id/RG_selectionPointage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_PointageDetailCommentaire"
+            android:layout_centerHorizontal="true">
+
+            <RadioButton
+                android:id="@+id/CB_entreprise_debut"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:buttonTint="@color/black"
+                android:onClick="valeurBoutonRadioDebut"
+                android:text="@string/a_l_entreprise"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:visibility="visible" />
+
+            <RadioButton
+                android:id="@+id/CB_chantier_debut"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:buttonTint="@color/black"
+                android:onClick="valeurBoutonRadioDebut"
+                android:text="@string/au_lieu"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <RadioButton
+                android:id="@+id/CB_pause_debut"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:buttonTint="@color/black"
+                android:onClick="valeurBoutonRadioDebut"
+                android:text="@string/en_pause"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <RadioButton
+                android:id="@+id/CB_autre_debut"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:buttonTint="@color/black"
+                android:onClick="valeurBoutonRadioDebut"
+                android:text="@string/autre"
+                android:textColor="@color/orange"
+                android:textSize="20sp" />
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/btn_validationPointage_debut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/RG_selectionPointage"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bouton_par_vert"
+            android:paddingHorizontal="25dp"
+            android:paddingVertical="15dp"
+            android:text="@string/valider"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/RL_debut"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp">
+
+        <TextView
+            android:id="@+id/tv_dernierPointage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/bouton_par_defaut"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="5dp"
+            android:text="@string/testaffichage"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+    </RelativeLayout>
+</RelativeLayout>
+
+
+
+
