@@ -1,5 +1,6 @@
 package Threads;
 
+import com.example.pointageperso3.MonAppContext;
 import com.example.pointageperso3.R;
 
 
@@ -9,7 +10,7 @@ import at.favre.lib.crypto.bcrypt.BCrypt;
 import Entity.User;
 
 public class ControleUser extends Thread {
-    private static final String TAG = String.valueOf(R.string.TAG);
+    private static final String TAG = MonAppContext.context.getString(R.string.TAG);
     private final String name;
     private String PWDClair;
     boolean validate = false;

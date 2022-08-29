@@ -63,35 +63,13 @@
                 android:textSize="20sp" />
 
             <RadioButton
-                android:id="@+id/CB_entreprise_fin"
+                android:id="@+id/CB_fin_pointage_precedent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:buttonTint="@color/black"
                 android:onClick="valeurBoutonRadioFin"
-                android:text="@string/a_l_entreprise"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
-
-            <RadioButton
-                android:id="@+id/CB_chantier_fin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:buttonTint="@color/black"
-                android:onClick="valeurBoutonRadioFin"
-                android:text="@string/au_lieu"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
-
-            <RadioButton
-                android:id="@+id/CB_pause_fin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:buttonTint="@color/black"
-                android:onClick="valeurBoutonRadioFin"
-                android:text="@string/en_pause"
+                android:text="@string/fin_pointage_precedent"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 

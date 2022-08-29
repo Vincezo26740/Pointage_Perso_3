@@ -21,6 +21,7 @@ import Entity.User;
 
 import java.util.concurrent.CountDownLatch;
 
+import Threads.ImportBDDInfos;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import Threads.RecupUserBDD;
 
@@ -297,6 +298,8 @@ public class MajMDP extends AppCompatActivity {
         applicationParametrage.setFirstUse(false);
         accesBddConfig1Fois.DaoConfigAppli().insertConfig(applicationParametrage);
         accesBddConfig1Fois.close();
+        ImportBDDInfos majInfosAppli = new ImportBDDInfos();
+        new Thread(majInfosAppli).start();
     });
 
     Thread ChgtMotDePasseBddSiValide = new Thread(() -> {

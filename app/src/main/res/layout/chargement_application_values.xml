@@ -11,8 +11,8 @@
         android:id="@+id/chargement_app_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="text de base"
-        android:textSize="20sp"
+        android:text="@string/text_de_base"
+        android:textSize="11sp"
         android:textStyle="bold"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"/>

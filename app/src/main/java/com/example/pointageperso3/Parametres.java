@@ -27,6 +27,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import Threads.AjoutSociete;
+import Threads.ImportBDDInfos;
 import Threads.MajSociete;
 import Threads.MajUser;
 import Threads.RecupLieu;
@@ -171,14 +172,28 @@ public class Parametres extends AppCompatActivity {
     });
 
     Thread recupUserEtSociete = new Thread(() -> {
-        PersoDatabase accesBdd = AccesBDD.getConnexionBDD();
-        userEntityBDD = accesBdd.DaoUser().rechercheUser(user);
-        societe = accesBdd.DaoSociete().findSociete();
-        accesBdd.close();
+        CountDownLatch majAttente = new CountDownLatch(6);
+        ImportBDDInfos majInfosAppli = new ImportBDDInfos(majAttente);
+        new Thread(majInfosAppli).start();
+        userEntityBDD = DonneesDeLApplication.getUtilisateur();
+        societe = DonneesDeLApplication.getSociete();
+//        confAppli = DonneesDeLApplication.getConfAppli();
+//        listeDesUtilisateurs = DonneesDeLApplication.getListeDesUtilisateurs();
+//        listeDePointages = DonneesDeLApplication.getListeDePointages();
+//        listeDeLieux = DonneesDeLApplication.getListeDeLieux();
         try {
-            Thread.currentThread().join(1000);
-        } catch (Exception ignored) {
+            majAttente.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+//        PersoDatabase accesBdd = AccesBDD.getConnexionBDD();
+//        userEntityBDD = accesBdd.DaoUser().rechercheUser(user);
+//        societe = accesBdd.DaoSociete().findSociete();
+//        accesBdd.close();
+//        try {
+//            Thread.currentThread().join(1000);
+//        } catch (Exception ignored) {
+//        }
         runOnUiThread(() -> {
             definitionVueUser();
             definitionVueSociete();

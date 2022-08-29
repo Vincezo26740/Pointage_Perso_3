@@ -14,7 +14,7 @@ public interface DaoLieu {
     @Insert
     void insert(Lieu lieu);
 
-    @Query("SELECT * FROM Lieu Order by id")
+    @Query("SELECT * FROM Lieu ")
     List<Lieu> findAll();
 
     @Query("SELECT name FROM Lieu WHERE id = :idLieu")

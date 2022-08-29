@@ -4,7 +4,10 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.icu.text.SimpleDateFormat;
+import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +16,8 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -38,31 +43,20 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import Threads.ImportBDDInfos;
 import adapterViewRecycler.RecyclerView_1_ligne_2_String;
 import Threads.EnvoieMail;
 import Threads.InfoConfigAppli;
 import Threads.RecupUserBDD;
 
 @SuppressWarnings("rawtypes")
-public class PointageFunction extends AppCompatActivity implements RecyclerView_1_ligne_2_String.ListenerDeSelection {
+public class PointageFunction extends AppCompatActivity implements RecyclerView_1_ligne_2_String.ListenerDeSelection,LocationListener {
 
 
     // Récupération Intent
     private String user, password, classInit, classEchec, classReussite, fonction;
 
-    // Constante acces permissions application
-    private final String AUTORISATIONGPSCOARSE = Manifest.permission.ACCESS_COARSE_LOCATION;
-    private final String AUTORISATIONGPSFIN = Manifest.permission.ACCESS_FINE_LOCATION;
-    private final String AUTORISATIONSMS = Manifest.permission.SEND_SMS;
-    private final String AUTORISATIONTELEPHONE = Manifest.permission.CALL_PHONE;
-    private final String AUTORISATIONECRITURE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-    private final String AUTORISATIONLECTURE = Manifest.permission.READ_EXTERNAL_STORAGE;
-    private final String AUTORISATIONMANAGE = Manifest.permission.MANAGE_EXTERNAL_STORAGE;
-    private final String AUTORISATIONLECTURETELEPHONENUMERO = Manifest.permission.READ_PHONE_NUMBERS;
-    private String[] listeAutorisation;
-    private final int REQUESTCODEVALUE = 100;
-
-    private CountDownLatch retourUser, retourConfig,retourDernierPointage;
+    private CountDownLatch retourUser, retourConfig, retourDernierPointage;
 
     private TextView title, tvDernierPointage;
     private Button absence, debutPointageButton, finPointageButton,
@@ -89,16 +83,21 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
 
     private boolean fonctionUsed;
 
-    private Pointage dernierPointage ;
+    private Pointage dernierPointage;
 
     //****************//
-
+//    User utilisateur;
+    Societe societe;
+    ConfigAppli confAppli;
+    ArrayList<User> listeDesUtilisateurs;
+    ArrayList<Pointage> listeDePointages;
+    ArrayList<Lieu> listeDeLieux;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestPermissions();
 
+        requestPermissions();
     }
 
     private void recupIntent() {
@@ -112,37 +111,47 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
 
     private void requestPermissions() {
         ArrayList<String> listPermission = new ArrayList<>();
+        String AUTORISATIONLECTURE = Manifest.permission.READ_EXTERNAL_STORAGE;
         if (ActivityCompat.checkSelfPermission(MonAppContext.context, AUTORISATIONLECTURE) != PackageManager.PERMISSION_GRANTED) {
             listPermission.add(AUTORISATIONLECTURE);
         }
+        String AUTORISATIONECRITURE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
         if (ActivityCompat.checkSelfPermission(MonAppContext.context, AUTORISATIONECRITURE) != PackageManager.PERMISSION_GRANTED) {
             listPermission.add(AUTORISATIONECRITURE);
         }
+        // Constante acces permissions application
+        String AUTORISATIONGPSCOARSE = Manifest.permission.ACCESS_COARSE_LOCATION;
         if (ActivityCompat.checkSelfPermission(MonAppContext.context, AUTORISATIONGPSCOARSE) != PackageManager.PERMISSION_GRANTED) {
             listPermission.add(AUTORISATIONGPSCOARSE);
         }
+        String AUTORISATIONGPSFIN = Manifest.permission.ACCESS_FINE_LOCATION;
         if (ActivityCompat.checkSelfPermission(MonAppContext.context, AUTORISATIONGPSFIN) != PackageManager.PERMISSION_GRANTED) {
             listPermission.add(AUTORISATIONGPSFIN);
         }
+        String AUTORISATIONTELEPHONE = Manifest.permission.CALL_PHONE;
         if (ActivityCompat.checkSelfPermission(MonAppContext.context, AUTORISATIONTELEPHONE) != PackageManager.PERMISSION_GRANTED) {
             listPermission.add(AUTORISATIONTELEPHONE);
         }
+        String AUTORISATIONLECTURETELEPHONENUMERO = Manifest.permission.READ_PHONE_NUMBERS;
         if (ActivityCompat.checkSelfPermission(MonAppContext.context, AUTORISATIONLECTURETELEPHONENUMERO) != PackageManager.PERMISSION_GRANTED) {
             listPermission.add(AUTORISATIONLECTURETELEPHONENUMERO);
         }
+        String AUTORISATIONSMS = Manifest.permission.SEND_SMS;
         if (ActivityCompat.checkSelfPermission(MonAppContext.context, AUTORISATIONSMS) != PackageManager.PERMISSION_GRANTED) {
             listPermission.add(AUTORISATIONSMS);
         }
         if (Build.VERSION.SDK_INT >= 30) {
+            String AUTORISATIONMANAGE = Manifest.permission.MANAGE_EXTERNAL_STORAGE;
             if (ActivityCompat.checkSelfPermission(MonAppContext.context, AUTORISATIONMANAGE) != PackageManager.PERMISSION_GRANTED) {
                 listPermission.add(AUTORISATIONMANAGE);
             }
         }
-        listeAutorisation = new String[listPermission.size()];
+        String[] listeAutorisation = new String[listPermission.size()];
         for (int i = 0; i < listeAutorisation.length; i++) {
             listeAutorisation[i] = listPermission.get(i);
         }
         if (listeAutorisation.length != 0) {
+            int REQUESTCODEVALUE = 100;
             ActivityCompat.requestPermissions(PointageFunction.this, listeAutorisation, REQUESTCODEVALUE);
         }
     }
@@ -157,37 +166,26 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
         recupIntent();
         super.onResume();
 
-        // récupération utilisateur infos
-        retourUser = new CountDownLatch(1);
-
-        RecupUserBDD bddUser = new RecupUserBDD(user, retourUser);
-        new Thread(bddUser).start();
+        CountDownLatch majAttente = new CountDownLatch(6);
+        ImportBDDInfos majInfosAppli = new ImportBDDInfos(majAttente);
+        new Thread(majInfosAppli).start();
+        utilisateur = DonneesDeLApplication.getUtilisateur();
+        societe = DonneesDeLApplication.getSociete();
+        confAppli = DonneesDeLApplication.getConfAppli();
+        listeDesUtilisateurs = DonneesDeLApplication.getListeDesUtilisateurs();
+        listeDePointages = DonneesDeLApplication.getListeDePointages();
+        listeDeLieux = DonneesDeLApplication.getListeDeLieux();
         try {
-            retourUser.await();
-        } catch (InterruptedException ignored) {
+            majAttente.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-
-        utilisateur = bddUser.retourUser();
-        // récupération configuration infos
-
-        retourConfig = new CountDownLatch(1);
-
-        InfoConfigAppli infoConfigAppli = new InfoConfigAppli(retourConfig);
-        new Thread(infoConfigAppli).start();
-        try {
-            retourConfig.await();
-        } catch (InterruptedException ignored) {
-        }
-
-
-
-        configAppli = infoConfigAppli.getInfoConfigAppli();
-        bienvenueUser = "Pointage de \n" + utilisateur.getFirstName();
+        bienvenueUser = getString(R.string.pointage_de) + " \n" + utilisateur.getFirstName();
         setContentView(R.layout.accueil);
+
         title = findViewById(R.id.tv_title_pointage);
         title.setText(bienvenueUser);
         activationBouton();
-
         if (fonction.equals("envoieEmail")) {
             EnvoiMailViaMessagerie();
         }
@@ -204,10 +202,26 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
         checkPointage.setOnClickListener(this::lecturePointages);
 
         debutPointageButton = findViewById(R.id.btn_pointage_debut);
-        debutPointageButton.setOnClickListener(this::debutPointage);
-
         finPointageButton = findViewById(R.id.btn_pointage_fin);
-        finPointageButton.setOnClickListener(this::finPointage);
+        if (listeDePointages.size() > 0) {
+            if (listeDePointages.get(0).getDateFin() != 0) {
+                debutPointageButton.setVisibility(View.VISIBLE);
+                debutPointageButton.setOnClickListener(this::debutPointage);
+                finPointageButton.setVisibility(View.GONE);
+                finPointageButton.setOnClickListener(null);
+            } else {
+                debutPointageButton.setVisibility(View.GONE);
+                debutPointageButton.setOnClickListener(null);
+                finPointageButton.setVisibility(View.VISIBLE);
+                finPointageButton.setOnClickListener(this::finPointage);
+            }
+        } else {
+            debutPointageButton.setVisibility(View.VISIBLE);
+            debutPointageButton.setOnClickListener(this::debutPointage);
+            finPointageButton.setVisibility(View.GONE);
+            finPointageButton.setOnClickListener(null);
+        }
+
 
         parametres = findViewById(R.id.btn_Parametres);
         parametres.setOnClickListener(this::parametres);
@@ -230,55 +244,61 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
         startActivity(demandeAttenteEtControle);
     }
 
-    Societe testSocRecup;
-    CountDownLatch recuprsociete = new CountDownLatch(1);
     private void EnvoiMailViaMessagerie() {
-        CountDownLatch CD = new CountDownLatch(1);
 
         // reset de l'intent fonction pour éviter une boucle infinie
         getIntent().putExtra("fonction", "");
 
         File path = EnvoieMail.getPathFichier();
         String messageText = getString(R.string.corps_fichier_csv) + user;
-        new Thread(recupSociete).start();
-        try {
-            recuprsociete.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        // requete pour envoie mail
-        Intent sendMail = new Intent(Intent.ACTION_SEND);
-        sendMail.setType("message/rfc822"); // setting file format
-       sendMail.putExtra(Intent.EXTRA_EMAIL, testSocRecup.getEmail());
-        sendMail.putExtra(Intent.EXTRA_SUBJECT, messageText);// setting corps de page
-        //création du provider pour échange avec les autres programmes
-        sendMail.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(Objects.requireNonNull(getApplicationContext()), BuildConfig.APPLICATION_ID + ".provider", path));
-        sendMail.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-        //choix du choix du programme à utilisé
-        startActivity(Intent.createChooser(sendMail, getString(R.string.titre_chooser_application_mail)));
 
-    }
+        CountDownLatch majAttente = new CountDownLatch(6);
+        ImportBDDInfos majInfosAppli = new ImportBDDInfos(majAttente);
+        new Thread(majInfosAppli).start();
+        utilisateur = DonneesDeLApplication.getUtilisateur();
+        societe = DonneesDeLApplication.getSociete();
+        if (societe == null) {
+            Intent renvoieVersLaPageDeParametreDeLaSociete = new Intent(this, Parametres.class);
 
-    Thread recupSociete = new Thread(new Runnable() {
-        @Override
-        public void run() {
-            PersoDatabase recupsoc = AccesBDD.getConnexionBDD();
-            testSocRecup = recupsoc.DaoSociete().findSociete();
+            renvoieVersLaPageDeParametreDeLaSociete.putExtra("user", user);
+            renvoieVersLaPageDeParametreDeLaSociete.putExtra("password", "");
+            renvoieVersLaPageDeParametreDeLaSociete.putExtra("class", getClass().getName());
+            renvoieVersLaPageDeParametreDeLaSociete.putExtra("classEchec", EcranDeConnexion.class.getName());
+            renvoieVersLaPageDeParametreDeLaSociete.putExtra("classReussite", PointageFunction.class.getName());
+            renvoieVersLaPageDeParametreDeLaSociete.putExtra("fonction", "ajout1User");
+
+            startActivity(renvoieVersLaPageDeParametreDeLaSociete);
+        } else {
+            confAppli = DonneesDeLApplication.getConfAppli();
+            listeDesUtilisateurs = DonneesDeLApplication.getListeDesUtilisateurs();
+            listeDePointages = DonneesDeLApplication.getListeDePointages();
+            listeDeLieux = DonneesDeLApplication.getListeDeLieux();
             try {
-                Thread.sleep(100);
+                majAttente.await();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            recupsoc.close();
-            recuprsociete.countDown();
+
+
+            // requete pour envoie mail
+            Intent sendMail = new Intent(Intent.ACTION_SEND);
+            sendMail.setType("message/rfc822"); // setting file format
+            sendMail.putExtra(Intent.ACTION_SENDTO, societe.getEmail());
+            sendMail.putExtra(Intent.EXTRA_SUBJECT, messageText);// setting corps de page
+            //création du provider pour échange avec les autres programmes
+            sendMail.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(Objects.requireNonNull(getApplicationContext()), BuildConfig.APPLICATION_ID + ".provider", path));
+            sendMail.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+            //choix du choix du programme à utilisé
+            startActivity(Intent.createChooser(sendMail, getString(R.string.titre_chooser_application_mail)));
         }
-    });
+    }
 
     private void parametres(View view) {
         Intent goParametre = new Intent(this, Parametres.class);
 
-        goParametre.putExtra("user", user);
+        goParametre.putExtra("user", utilisateur.getName());
         goParametre.putExtra("password", "");
         goParametre.putExtra("class", getClass().getName());
         goParametre.putExtra("classEchec", "");
@@ -378,6 +398,7 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
                 checked = true;
             }
         } while (!checked);
+
     }
 
     private void absence(View view) {
@@ -390,59 +411,18 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
     }
 
     Thread dernierPointageDebutEtFinAffichage = new Thread(() -> {
-        StringBuilder concatenationDernierPointage = new StringBuilder();
-        PersoDatabase accesBdd = AccesBDD.getConnexionBDD();
-        ArrayList<Pointage> dernierEnregistrementBDDList = (ArrayList<Pointage>) accesBdd.DaoPointage().findAllLimit(1);
-        accesBdd.close();
-        if (dernierEnregistrementBDDList.size() > 0) {
-            Pointage dernierEnregistrementBDD = dernierEnregistrementBDDList.get(0);
-            String lieuDernierPointage = accesBdd.DaoLieu().findNameLieu(dernierEnregistrementBDD.getReferenceLieuDePointage());
-            accesBdd.close();
-            concatenationDernierPointage.append(getString(R.string.dernier_mointage_fait));
-            concatenationDernierPointage.append(dernierEnregistrementBDD.getNomUtilisateur()).append("\n");
-            concatenationDernierPointage.append(getString(R.string.pointe_le)).append(formatagedate.format(dernierEnregistrementBDD.getDateDebut())).append("\n");
-            switch (dernierEnregistrementBDD.getEtatPointage()) {
-                case 1:
-                    concatenationDernierPointage.append(getString(R.string.pointage_debut)).append("\n");
-                    break;
-                case 2:
-                    concatenationDernierPointage.append(getString(R.string.fin_depointage)).append("\n");
-                    break;
-                case 3:
-                    concatenationDernierPointage.append(getString(R.string.maladie_ou_congee)).append("\n");
-                    break;
-                default:
-                    concatenationDernierPointage.append(getString(R.string.a_controler)).append("\n");
-                    break;
-            }
-            if (dernierEnregistrementBDD.getEtatPointage() != 3) {
-                concatenationDernierPointage.append(getString(R.string.lieux_de_pointage));
-                switch (dernierEnregistrementBDD.getLieuDePointage()) {
-                    case 0:
-                        concatenationDernierPointage.append(getString(R.string.entreprise));
-                        break;
-                    case 1:
-                        concatenationDernierPointage.append(lieuDernierPointage);
-                        break;
-                    case 2:
-//                            pointagePrecedent.append("Lieu : ").append(testNomLieu);
-                        break;
-                    case 3:
-                        concatenationDernierPointage.append(getString(R.string.en_pause));
-                        break;
-                    case 4:
-                        concatenationDernierPointage.append(getString(R.string.fin_de_journee));
-                        break;
-                    case 5:
-                        concatenationDernierPointage.append(getString(R.string.autres_raisons));
-                        concatenationDernierPointage.append("\n");
-                        concatenationDernierPointage.append(getString(R.string.commentaires));
-                        concatenationDernierPointage.append(dernierEnregistrementBDD.getCommentaires());
-                        break;
-                }
-            }
+        CountDownLatch maj = new CountDownLatch(6);
+        ImportBDDInfos majInfosAppli = new ImportBDDInfos(maj);
+        new Thread(majInfosAppli).start();
+        try {
+            maj.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (listeDePointages.size() > 0) {
+            String dernierEnregistrementBDD = listeDePointages.get(0).toString();
             runOnUiThread(() -> {
-                tvDernierPointage.setText(concatenationDernierPointage);
+                tvDernierPointage.setText(dernierEnregistrementBDD);
             });
         } else {
             runOnUiThread(() -> {
@@ -499,22 +479,18 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
         // Is the button now checked?
         boolean checked = true;
         // Check which radio button was clicked
-        RadioButton entreprise = findViewById(R.id.CB_entreprise_fin);
-        RadioButton chantier = findViewById(R.id.CB_chantier_fin);
-        RadioButton pause = findViewById(R.id.CB_pause_fin);
+        RadioButton finPointagePrecedent = findViewById(R.id.CB_fin_pointage_precedent);
         RadioButton autre = findViewById(R.id.CB_autre_fin);
         RadioButton journee = findViewById(R.id.CB_journee_fin);
         etatPointage = 2;
         do {
-            if (entreprise.isChecked()) {
+            if (finPointagePrecedent.isChecked()) {
                 lieuDePointage = 0;
-            } else if (chantier.isChecked()) {
-                lieuDePointage = 1;
-            } else if (pause.isChecked()) {
-                lieuDePointage = 3;
             } else if (autre.isChecked()) {
+
                 lieuDePointage = 5;
             } else if (journee.isChecked()) {
+                commentaires = getString(R.string.fin_de_journee);
                 lieuDePointage = 4;
             } else {
                 checked = false;
@@ -545,7 +521,6 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
                 findViewById(R.id.btn_Retour).setOnClickListener(this::debutPointage);
                 validationPointage = findViewById(R.id.btn_validationPointage_raisonAutre);
                 validationPointage.setOnClickListener(this::enregistrementAutreRaison);
-
                 break;
             default:
                 onResume();
@@ -642,7 +617,6 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
 
         pointageActuel = new Pointage(utilisateur.getId(), utilisateur.getName(), date.getTime(), commentaires, etatPointage);
         pointageActuel.setLieuDePointage(lieuDePointage);
-
         pointageActuel.setLatitude(latitude);
         pointageActuel.setLongitude(longitude);
 
@@ -656,39 +630,6 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
         enregistrementDonneesPointage();
     }
 
-    private Pointage referencePointageCreation(Pointage referencePointage, int etatPointage) {
-        Pointage pointage = new Pointage(referencePointage.getIdUser(),
-                referencePointage.getNomUtilisateur(),
-                referencePointage.getDateDebut(),
-                referencePointage.getCommentaires(),
-                etatPointage);
-        pointage.setReferenceLieuDePointage(referencePointage.getReferenceLieuDePointage());
-        pointage.setLieuDePointage(referencePointage.getLieuDePointage());
-        pointage.setEtatJournee(referencePointage.getEtatJournee());
-        pointage.setLongitude(referencePointage.getLongitude());
-        pointage.setLatitude(referencePointage.getLatitude());
-
-        return pointage;
-    }
-
-    private Pointage creationPointageIntermediarePlus1(Pointage referencePointage) {
-        long rajoutUneMs;
-        rajoutUneMs = referencePointage.getDateDebut();
-        rajoutUneMs++;
-        Pointage pointageCreer = referencePointageCreation(referencePointage, 2);
-        pointageCreer.setDateDebut(rajoutUneMs);
-        return pointageCreer;
-    }
-
-    private Pointage creationPointageIntermediareMoins1(Pointage referencePointage) {
-        long retraitUneMs;
-        retraitUneMs = referencePointage.getDateDebut();
-        retraitUneMs--;
-        Pointage pointageCreer = referencePointageCreation(referencePointage, 1);
-        pointageCreer.setDateDebut(retraitUneMs);
-        return pointageCreer;
-    }
-
     public void enregistrementDonneesPointage() {
         ExecutorService enregistrement = Executors.newSingleThreadExecutor();
         enregistrement.execute(() -> {
@@ -699,46 +640,48 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
             List<Pointage> recupDernierPointage = BDD.DaoPointage().findAllLimit(1);
 
             //  --- --- --- Controle de la bonne suite entre DEBUT et FIN --- --- ---
-            ArrayList<Pointage> pointagesAEnregistre = new ArrayList<>();
+//            ArrayList<Pointage> pointagesAEnregistre = new ArrayList<>();
             if (recupDernierPointage.size() > 0) {
                 dernierEnregistrement = recupDernierPointage.get(0);
                 switch (pointageActuel.getEtatPointage()) {
-                    case 1:
-                        if (pointageActuel.getEtatPointage() == dernierEnregistrement.getEtatPointage()) {
-                            pointageAInsererAvantPointageActuel = creationPointageIntermediarePlus1(dernierEnregistrement);
-                            pointagesAEnregistre.add(pointageAInsererAvantPointageActuel);
-                        }
-                        break;
                     case 2:
-                        if (pointageActuel.getEtatPointage() == dernierEnregistrement.getEtatPointage()) {
-                            pointageAInsererAvantPointageActuel = creationPointageIntermediareMoins1(pointageActuel);
-                            pointagesAEnregistre.add(pointageAInsererAvantPointageActuel);
-                        } else if (dernierEnregistrement.getEtatPointage() == 1) {
-                            if (pointageActuel.getLieuDePointage() != dernierEnregistrement.getLieuDePointage() ||
-                                    pointageActuel.getReferenceLieuDePointage() != dernierEnregistrement.getReferenceLieuDePointage()) {
-                                pointageAInsererAvantPointageActuel = creationPointageIntermediarePlus1(dernierEnregistrement);
-                                pointagesAEnregistre.add(pointageAInsererAvantPointageActuel);
-                                pointageAInsererAvantPointageActuel = creationPointageIntermediareMoins1(pointageActuel);
-                                pointagesAEnregistre.add(pointageAInsererAvantPointageActuel);
-                            }
-                        } else {
-                            pointageAInsererAvantPointageActuel = creationPointageIntermediareMoins1(pointageActuel);
-                            pointagesAEnregistre.add(pointageAInsererAvantPointageActuel);
-                        }
+                        dernierEnregistrement.setDateFin(pointageActuel.getDateDebut());
+                        dernierEnregistrement.setCommentaires(pointageActuel.getCommentaires());
+                        BDD.DaoPointage().update(dernierEnregistrement);
+                        BDD.close();
                         break;
                     default:
+                        if (pointageActuel.getEtatPointage() != 1) {
+                            pointageActuel.setDateFin(pointageActuel.getDateDebut() + 1);
+                        }
+                        BDD.DaoPointage().insertPointageEntity(pointageActuel);
+                        BDD.close();
                         break;
                 }
+            } else {
+                BDD.DaoPointage().insertPointageEntity(pointageActuel);
+                BDD.close();
             }
-            pointagesAEnregistre.add(pointageActuel);
-            for (int i = 0; i < pointagesAEnregistre.size(); i++) {
-                Pointage pointage = referencePointageCreation(pointagesAEnregistre.get(i), pointagesAEnregistre.get(i).getEtatPointage());
-                BDD.DaoPointage().insertPointageEntity(pointage);
+
+            CountDownLatch majAttente = new CountDownLatch(6);
+            ImportBDDInfos majInfosAppli = new ImportBDDInfos(majAttente);
+            new Thread(majInfosAppli).start();
+            utilisateur = DonneesDeLApplication.getUtilisateur();
+            societe = DonneesDeLApplication.getSociete();
+            confAppli = DonneesDeLApplication.getConfAppli();
+            listeDesUtilisateurs = DonneesDeLApplication.getListeDesUtilisateurs();
+            listeDePointages = DonneesDeLApplication.getListeDePointages();
+            listeDeLieux = DonneesDeLApplication.getListeDeLieux();
+            try {
+                majAttente.await();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
 // <<<<<<<<<<<<<<<<<<<<<<<<         FIN  TRAITEMENT DE LA 2ND THREAD          >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             //Post traitement
             etatPointage = lieuDePointage = idPointage = 0;
             commentaires = "";
+
             runOnUiThread(this::onResume);
         });
     }
@@ -752,108 +695,26 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
             //postTraitement
 // <<<<<<<<<<<<<<<<<<<<<<<<           TRAITEMENT DE LA 2ND THREAD          >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             //connexion BDD
-            PersoDatabase BDD = AccesBDD.getConnexionBDD();
-            // *****************           RECUPERATION DES DERNIERS POINTAGES          ****************************
-            // limitation des donnees recues
-            int limitAffichagePointage = 6;
-            listPointage = (ArrayList<Pointage>) BDD.DaoPointage().findListById(utilisateur.getId(), limitAffichagePointage);
-            int indice = listPointage.size() - 1; // mise en place d'un indice pour contrôle sur les pointages suivants
+
+            int indice = listeDePointages.size() - 1; // mise en place d'un indice pour contrôle sur les pointages suivants
             SimpleDateFormat formatagedate = new SimpleDateFormat("dd MMMM yyyy HH:mm:ss", Locale.FRANCE);
             SimpleDateFormat formatagedate2 = new SimpleDateFormat("dd MMMM yyyy", Locale.FRANCE);
 
             // *****************           LECTURE DES INFOS BDD           ****************************
             for (int i = 0; i <= indice; i++) {
-                String testNomLieu = BDD.DaoLieu().findNameLieu(listPointage.get(i).getReferenceLieuDePointage());
-                String dateInit = formatagedate.format(listPointage.get(i).getDateDebut()); // Date BDD formatage long
-                String date1 = formatagedate2.format(listPointage.get(i).getDateDebut());   // Date BDD formatage court
-
-                if (i == 0) {
-                    pointagePrecedent.append("/******************************/\n");
-                }
-                pointagePrecedent.append(listPointage.get(i).getNomUtilisateur()).append("\n");
-//                pointagePrecedent.append(" Pointé le ").append(dateInit).append("\n");
-
-                switch (listPointage.get(i).getEtatPointage()) {
-                    case 1:
-                        pointagePrecedent.append(getString(R.string.lieux_de_pointage));
-                        switch (listPointage.get(i).getLieuDePointage()) {
-                            case 0:
-                                pointagePrecedent.append(getString(R.string.entreprise));
-                                break;
-                            case 1:
-                                pointagePrecedent.append(testNomLieu);
-                                break;
-                            case 2:
-                                break;
-                            case 3:
-                                pointagePrecedent.append(getString(R.string.en_pause));
-                                break;
-                            case 4:
-                                pointagePrecedent.append(getString(R.string.fin_de_journee));
-                                break;
-                            case 5:
-                                pointagePrecedent.append(getString(R.string.autres_raisons));
-                                pointagePrecedent.append("\n");
-                                pointagePrecedent.append(getString(R.string.commentaires) + "\n");
-                                pointagePrecedent.append(listPointage.get(i).getCommentaires());
-                                break;
-                        }
-                        pointagePrecedent.append("\n" + getString(R.string.debut) + " ").append(dateInit).append("\n");
-                        break;
-                    case 2:
-                        pointagePrecedent.append(getString(R.string.lieux_de_pointage));
-                        if (i + 1 <= listPointage.size()) {
-                            switch (listPointage.get(i).getLieuDePointage()) {
-                                case 0:
-                                    pointagePrecedent.append(getString(R.string.entreprise));
-                                    break;
-                                case 1:
-                                    pointagePrecedent.append(testNomLieu);
-                                    break;
-                                case 2:
-                                    break;
-                                case 3:
-                                    pointagePrecedent.append(getString(R.string.en_pause));
-                                    break;
-                                case 4:
-                                    pointagePrecedent.append(getString(R.string.fin_depointage));
-                                    break;
-                                case 5:
-                                    pointagePrecedent.append(getString(R.string.autres_raisons));
-                                    pointagePrecedent.append("\n");
-                                    pointagePrecedent.append(getString(R.string.commentaires));
-                                    pointagePrecedent.append(listPointage.get(i).getCommentaires());
-                                    break;
-                            }
-                        }
-                        if (i + 1 < listPointage.size()) {
-                            i++;
-                        }
-                        pointagePrecedent.append("\n").append(getString(R.string.debut)).append(" ").append(formatagedate.format(listPointage.get(i).getDateDebut())).append("\n");
-
-                        pointagePrecedent.append(getString(R.string.fin)).append(" ").append(dateInit).append("\n");
-
-                        break;
-                    case 3:
-                        pointagePrecedent.append(getString(R.string.maladie_ou_congee)).append("\n");
-                        break;
-                    default:
-                        pointagePrecedent.append(getString(R.string.a_controler)).append("\n");
-                        break;
-                }
-                pointagePrecedent.append("\n");
-                if (listPointage.get(i).getEtatJournee() == 1) {
+                pointagePrecedent.append(listeDePointages.get(i).toString());
+                if (listeDePointages.get(i).getEtatJournee() == 1) {
                     pointagePrecedent.append("< - - - - - - - - - - - - - >\n");
                 }
-                if (i < indice) {
-                    String date2 = formatagedate2.format(listPointage.get(i + 1).getDateDebut());
-                    if (!date1.equals(date2)) {
-                        pointagePrecedent.append("/- - - - - - - - - - - - - - - - - - - - - - - - - - - -/\n");
-                    }
-                }
-                if (i == indice) {
-                    pointagePrecedent.append("/******************************/\n");
-                }
+//                if (i < indice) {
+//                    String date2 = formatagedate2.format(listPointage.get(i + 1).getDateDebut());
+//                    if (!date1.equals(date2)) {
+//                        pointagePrecedent.append("/- - - - - - - - - - - - - - - - - - - - - - - - - - - -/\n");
+//                    }
+//                }
+//                if (i == indice) {
+//                    pointagePrecedent.append("/******************************/\n");
+//                }
             }
 // <<<<<<<<<<<<<<<<<<<<<<<<         FIN  TRAITEMENT DE LA 2ND THREAD          >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -864,7 +725,7 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
                 TextView toastExterne = findViewById(R.id.test_toast_remplacement);
                 Button retourToast = findViewById(R.id.btn_RetourToast);
                 retourToast.setOnClickListener(v -> fermetureFenetreToast.countDown());
-                if (listPointage.size() > 0) {
+                if (listeDePointages.size() > 0) {
                     toastExterne.setText(pointagePrecedent.toString());
                 } else
                     toastExterne.setText(getString(R.string.pas_de_pointage));
@@ -875,6 +736,22 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
 
     CountDownLatch fermetureFenetreToast;
 
+    Thread majInfoAppli = new Thread(() -> {
+        CountDownLatch majAttente = new CountDownLatch(6);
+        ImportBDDInfos majInfosAppli = new ImportBDDInfos(majAttente);
+        new Thread(majInfosAppli).start();
+        utilisateur = DonneesDeLApplication.getUtilisateur();
+        societe = DonneesDeLApplication.getSociete();
+        confAppli = DonneesDeLApplication.getConfAppli();
+        listeDesUtilisateurs = DonneesDeLApplication.getListeDesUtilisateurs();
+        listeDePointages = DonneesDeLApplication.getListeDePointages();
+        listeDeLieux = DonneesDeLApplication.getListeDeLieux();
+        try {
+            majAttente.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    });
     //Thread durée affichage pointage
     Thread toastCompteur = new Thread(() -> {
         int compteur = 20;
@@ -892,46 +769,41 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
     });
 
     //Géo-localisation
-//
-//    @Override
-//    public void onLocationChanged(@NonNull Location location) {
-//        longitude = location.getLongitude();
-//        latitude = location.getLatitude();
-//    }
-//
-//    @Override
-//    public void onFlushComplete(int requestCode) {
-//        LocationListener.super.onFlushComplete(requestCode);
-//    }
-//
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-//                                           @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, new int[]{PackageManager.PERMISSION_GRANTED});
-//        if (requestCode != REQUESTCODEVALUE)
-//            return;
-//        int idxPermFine = -1;
-//        for (int i = 0; i < permissions.length && idxPermFine == -1; i++) {
-//            if (permissions[i].
-//                    equals(Manifest.permission.ACCESS_FINE_LOCATION))
-//                idxPermFine = i;
-//            grantResults[idxPermFine] = PackageManager.PERMISSION_GRANTED;
-//        }
-//    }
-//
-//
-//    @Override
-//    public void onStatusChanged(String provider, int status, Bundle extras) {
-//        LocationListener.super.onStatusChanged(provider, status, extras);
-//        switch (status) {
-//            case LocationProvider.AVAILABLE:
-//            case LocationProvider.OUT_OF_SERVICE:
-//            case LocationProvider.TEMPORARILY_UNAVAILABLE:
-//        }
-//    }
-//
-//    @Override
-//    public void onActivityResult(Object result) {
-//
-//    }
+
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        longitude = location.getLongitude();
+        latitude = location.getLatitude();
+    }
+
+    @Override
+    public void onFlushComplete(int requestCode) {
+        LocationListener.super.onFlushComplete(requestCode);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, new int[]{PackageManager.PERMISSION_GRANTED});
+        if (requestCode != PackageManager.PERMISSION_GRANTED)
+            return;
+        int idxPermFine = -1;
+        for (int i = 0; i < permissions.length && idxPermFine == -1; i++) {
+            if (permissions[i].
+                    equals(Manifest.permission.ACCESS_FINE_LOCATION))
+                idxPermFine = i;
+            grantResults[idxPermFine] = PackageManager.PERMISSION_GRANTED;
+        }
+    }
+
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        LocationListener.super.onStatusChanged(provider, status, extras);
+        switch (status) {
+            case LocationProvider.AVAILABLE:
+            case LocationProvider.OUT_OF_SERVICE:
+            case LocationProvider.TEMPORARILY_UNAVAILABLE:
+        }
+    }
 }

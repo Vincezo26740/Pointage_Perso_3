@@ -79,8 +79,19 @@
     <string name="lieux_de_pointage">Lieu de pointage :</string>
     <string name="entreprise" translatable="false">Entreprise</string>
     <string name="commentaires">Commentaires :</string>
-    <string name="dernier_mointage_fait">Dernier pointage réalisé \\n</string>
+    <string name="dernier_mointage_fait">Dernier pointage réalisé</string>
     <string name="prenom_utilisateur">Prénom Utilisateur</string>
     <string name="separateur_fichier">,</string>
     <string name="mise_a_la_ligne_fichier" translatable="false">\n</string>
+    <string name="chargement">Chargement Logiciel</string>
+    <string name="chgtConf">Chargement de la configuration</string>
+    <string name="chgtUser">Chargement utilisateurs</string>
+    <string name="chgtSoc">Chargement societe</string>
+    <string name="chgtPtge">Chargement des 10 derniers pointages</string>
+    <string name="chgtLieux">Chargement des Lieux</string>
+    <string name="chgtFin">Fin du chargement de l\'application</string>
+    <string name="pas_fin_pointe">non pointée</string>
+    <string name="pointage_de">Pointage de</string>
+    <string name="fin_pointage_precedent">Fin du pointage précédent</string>
+    <string name="text_de_base">text de base</string>
 </resources>

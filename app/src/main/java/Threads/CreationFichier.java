@@ -3,16 +3,22 @@ package Threads;
 import android.icu.text.SimpleDateFormat;
 import android.os.Environment;
 
+import com.example.pointageperso3.DonneesDeLApplication;
 import com.example.pointageperso3.MonAppContext;
 import com.example.pointageperso3.R;
 
 import DAO.AccesBDD;
 import DAO.PersoDatabase;
+import Entity.ConfigAppli;
+import Entity.Lieu;
 import Entity.Pointage;
+import Entity.Societe;
+import Entity.User;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -38,6 +44,13 @@ public class CreationFichier extends Thread {
     private PersoDatabase bddAcces;
     private File newPath;
 
+    User utilisateur;
+    Societe societe;
+    ConfigAppli confAppli;
+    ArrayList<User> listeDesUtilisateurs;
+    ArrayList<Pointage> listeDePointages;
+    ArrayList<Lieu> listeDeLieux;
+
     public CreationFichier(CountDownLatch travailFini) {
 
         this.travailFini = travailFini;
@@ -51,8 +64,16 @@ public class CreationFichier extends Thread {
             e.printStackTrace();
         }
 
+        utilisateur = DonneesDeLApplication.getUtilisateur();
+        societe = DonneesDeLApplication.getSociete();
+        confAppli = DonneesDeLApplication.getConfAppli();
+        listeDesUtilisateurs = DonneesDeLApplication.getListeDesUtilisateurs();
+        listeDePointages = DonneesDeLApplication.getListeDePointages();
+        listeDeLieux = DonneesDeLApplication.getListeDeLieux();
+
         dateJour = new Date();
         dateJourDouble = dateJour.getTime();
+        dernierEnvoi = Double.doubleToLongBits(confAppli.getDateDernierEnvoi());
         pointage = bddAcces.DaoPointage().findByDate(dernierEnvoi, dateJourDouble);
         donnesATransferer.append(MonAppContext.context.getString(R.string.prenom_utilisateur)).append(separateur)
                 .append(MonAppContext.context.getString(R.string.titre_lieux)).append(separateur)
@@ -74,94 +95,96 @@ public class CreationFichier extends Thread {
 //            for (Pointage recupPointage : pointage) {
 //                donnesATransferer.append(transformationDesDonnes(recupPointage));
 //            }
-            PersoDatabase BDD = AccesBDD.getConnexionBDD();
-            for (int i = 0; i < pointage.size(); i++) {
+//            PersoDatabase BDD = AccesBDD.getConnexionBDD();
+            for (Pointage pointageDetail: pointage
+                 ) {
+                donnesATransferer.append(pointageDetail.toStringForCsv(separateur));
 
-                String testNomLieu = BDD.DaoLieu().findNameLieu(pointage.get(i).getReferenceLieuDePointage());
-                String dateInit = formatagedate.format(pointage.get(i).getDateDebut()); // Date BDD formatage long
-                donnesATransferer.append(pointage.get(i).getNomUtilisateur()).append(separateur);
+//                String testNomLieu = BDD.DaoLieu().findNameLieu(pointage.get(i).getReferenceLieuDePointage());
+//                String dateInit = formatagedate.format(pointage.get(i).getDateDebut()); // Date BDD formatage long
+//                donnesATransferer.append(pointage.get(i).getNomUtilisateur()).append(separateur);
 
 //                pointagePrecedent.append(" Pointé le ").append(dateInit).append("\n");
-
-                switch (pointage.get(i).getEtatPointage()) {
-                    case 1:
-                        switch (pointage.get(i).getLieuDePointage()) {
-                            case 0:
-                                donnesATransferer.append(MonAppContext.context.getString(R.string.entreprise));
-                                break;
-                            case 1:
-                                donnesATransferer.append(testNomLieu);
-                                break;
-                            case 2:
-                                break;
-                            case 3:
-                                donnesATransferer.append(MonAppContext.context.getString(R.string.en_pause));
-                                break;
-                            case 4:
-                                donnesATransferer.append(MonAppContext.context.getString(R.string.debut));
-                                break;
-                            case 5:
-                                donnesATransferer.append(MonAppContext.context.getString(R.string.autre));
-                                break;
-                        }
-                        donnesATransferer.append(separateur);
-                        donnesATransferer.append(pointage.get(i).getCommentaires());
-                        donnesATransferer.append(separateur);
-                        donnesATransferer.append(formatagedate.format(pointage.get(i).getDateDebut())).append(separateur);
-                        donnesATransferer.append(formatagedate.format(pointage.get(i + 1).getDateDebut())).append(separateur);
-                        donnesATransferer.append(pointage.get(i).getLongitude()).append(separateur).append(pointage.get(i).getLatitude());
-                        i++;
-                        break;
-                    case 2:
-
-                        switch (pointage.get(i).getLieuDePointage()) {
-                            case 0:
-                                donnesATransferer.append(MonAppContext.context.getString(R.string.entreprise));
-                                break;
-                            case 1:
-                                donnesATransferer.append(testNomLieu);
-                                break;
-                            case 2:
-                                break;
-                            case 3:
-                                donnesATransferer.append(MonAppContext.context.getString(R.string.en_pause));
-                                break;
-                            case 4:
-                                donnesATransferer.append(MonAppContext.context.getString(R.string.fin_de_journee));
-                                break;
-                            case 5:
-                                donnesATransferer.append(MonAppContext.context.getString(R.string.autre));
-
-                                break;
-                        }
-
-//                        if (i + 1 < pointage.size()) {
-//                            i++;
+//
+//                switch (pointage.get(i).getEtatPointage()) {
+//                    case 1:
+//                        switch (pointage.get(i).getLieuDePointage()) {
+//                            case 0:
+//                                donnesATransferer.append(MonAppContext.context.getString(R.string.entreprise));
+//                                break;
+//                            case 1:
+//                                donnesATransferer.append(testNomLieu);
+//                                break;
+//                            case 2:
+//                                break;
+//                            case 3:
+//                                donnesATransferer.append(MonAppContext.context.getString(R.string.en_pause));
+//                                break;
+//                            case 4:
+//                                donnesATransferer.append(MonAppContext.context.getString(R.string.debut));
+//                                break;
+//                            case 5:
+//                                donnesATransferer.append(MonAppContext.context.getString(R.string.autre));
+//                                break;
 //                        }
-                        donnesATransferer.append(separateur);
-                        donnesATransferer.append(pointage.get(i).getCommentaires());
-                        donnesATransferer.append(separateur);
-                        donnesATransferer.append(formatagedate.format(pointage.get(i - 1).getDateDebut()));
-                        donnesATransferer.append(separateur);
-                        donnesATransferer.append(dateInit);
-                        donnesATransferer.append(separateur);
-                        donnesATransferer.append(pointage.get(i).getLongitude()).append(separateur).append(pointage.get(i).getLatitude());
-                        break;
-                    case 3:
-                        donnesATransferer.append(MonAppContext.context.getString(R.string.maladie_ou_congee));
-                        donnesATransferer.append(separateur);
-                        donnesATransferer.append(pointage.get(i).getCommentaires());
-                        donnesATransferer.append(separateur);
-                        donnesATransferer.append(formatagedate.format(pointage.get(i).getDateDebut()));
-                        donnesATransferer.append(separateur);
-                        donnesATransferer.append(dateInit);
-                        donnesATransferer.append(separateur);
-                        donnesATransferer.append(pointage.get(i).getLongitude()).append(separateur).append(pointage.get(i).getLatitude());
-                        break;
-                    default:
-                        donnesATransferer.append(MonAppContext.context.getString(R.string.a_controler));
-                        break;
-                }
+//                        donnesATransferer.append(separateur);
+//                        donnesATransferer.append(pointage.get(i).getCommentaires());
+//                        donnesATransferer.append(separateur);
+//                        donnesATransferer.append(formatagedate.format(pointage.get(i).getDateDebut())).append(separateur);
+//                        donnesATransferer.append(formatagedate.format(pointage.get(i + 1).getDateDebut())).append(separateur);
+//                        donnesATransferer.append(pointage.get(i).getLongitude()).append(separateur).append(pointage.get(i).getLatitude());
+//                        i++;
+//                        break;
+//                    case 2:
+//                        switch (pointage.get(i).getLieuDePointage()) {
+//                            case 0:
+//                                donnesATransferer.append(MonAppContext.context.getString(R.string.entreprise));
+//                                break;
+//                            case 1:
+//                                donnesATransferer.append(testNomLieu);
+//                                break;
+//                            case 2:
+//                                break;
+//                            case 3:
+//                                donnesATransferer.append(MonAppContext.context.getString(R.string.en_pause));
+//                                break;
+//                            case 4:
+//                                donnesATransferer.append(MonAppContext.context.getString(R.string.fin_de_journee));
+//                                break;
+//                            case 5:
+//                                donnesATransferer.append(MonAppContext.context.getString(R.string.autre));
+//
+//                                break;
+//                        }
+//
+////                        if (i + 1 < pointage.size()) {
+////                            i++;
+////                        }
+//                        donnesATransferer.append(separateur);
+//                        donnesATransferer.append(pointage.get(i).getCommentaires());
+//                        donnesATransferer.append(separateur);
+//                        donnesATransferer.append(formatagedate.format(pointage.get(i - 1).getDateDebut()));
+//                        donnesATransferer.append(separateur);
+//                        donnesATransferer.append(dateInit);
+//                        donnesATransferer.append(separateur);
+//                        donnesATransferer.append(pointage.get(i).getLongitude()).append(separateur).append(pointage.get(i).getLatitude());
+//                        break;
+//                    case 3:
+//                        donnesATransferer.append(MonAppContext.context.getString(R.string.maladie_ou_congee));
+//                        donnesATransferer.append(separateur);
+//                        donnesATransferer.append(pointage.get(i).getCommentaires());
+//                        donnesATransferer.append(separateur);
+//                        donnesATransferer.append(formatagedate.format(pointage.get(i).getDateDebut()));
+//                        donnesATransferer.append(separateur);
+//                        donnesATransferer.append(dateInit);
+//                        donnesATransferer.append(separateur);
+//                        donnesATransferer.append(pointage.get(i).getLongitude()).append(separateur).append(pointage.get(i).getLatitude());
+//                        break;
+//                    default:
+//                        donnesATransferer.append(MonAppContext.context.getString(R.string.a_controler));
+//                        break;
+//                }
+
                 donnesATransferer.append(miseALaLigne);
             }
         }
@@ -202,59 +225,7 @@ public class CreationFichier extends Thread {
         return newPath;
     }
 
-    private String transformationDesDonnes(Pointage recupPointage) {
-        int idLieu = recupPointage.getLieuDePointage();
-        int idEtatPointage = recupPointage.getEtatPointage();
-        String user = recupPointage.getNomUtilisateur();
-        String dateTransformee = formatagedate.format(recupPointage.getDateDebut());
-        String etatPointage, lieuDePointage;
-        String longitude = String.valueOf(recupPointage.getLongitude());
-        String latitude = String.valueOf(recupPointage.getLatitude());
-        String commentaires = recupPointage.getCommentaires();
 
-        switch (idEtatPointage) {
-            case 1:
-                etatPointage = String.valueOf(MonAppContext.context.getString(R.string.pointage_debut));
-                break;
-            case 2:
-                etatPointage = String.valueOf(MonAppContext.context.getString(R.string.fin_de_journee));
-                break;
-            case 3:
-                etatPointage = String.valueOf(MonAppContext.context.getString(R.string.absence_raison_maladie));
-                break;
-            default:
-                etatPointage = String.valueOf(MonAppContext.context.getString(R.string.a_controler));
-                break;
-        }
-        switch (idLieu) {
-            case 1:
-                bddAcces = AccesBDD.getConnexionBDD();
-                lieuDePointage = bddAcces.DaoLieu().findNameLieu(recupPointage.getReferenceLieuDePointage());
-                bddAcces.close();
-                break;
-            case 3:
-                lieuDePointage = String.valueOf(MonAppContext.context.getString(R.string.en_pause));
-                break;
-            case 4:
-                lieuDePointage = String.valueOf(MonAppContext.context.getString(R.string.fin_de_journee));
-                break;
-            case 5:
-                lieuDePointage = String.valueOf(MonAppContext.context.getString(R.string.a_controler));
-                break;
-            default:
-                lieuDePointage = String.valueOf(MonAppContext.context.getString(R.string.entreprise));
-                break;
-        }
-
-        return user + separateur +
-                dateTransformee + separateur +
-                etatPointage + separateur +
-                lieuDePointage + separateur +
-                commentaires + separateur +
-                longitude + separateur +
-                latitude + separateur +
-                miseALaLigne;
-    }
 }
 
 

@@ -1,5 +1,7 @@
 package com.example.pointageperso3;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 import Entity.ConfigAppli;

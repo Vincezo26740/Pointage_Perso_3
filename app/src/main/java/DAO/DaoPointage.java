@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import Entity.Pointage;
 @Dao
 public  interface DaoPointage {
 
-    @Query("SELECT * FROM Pointage ORDER BY dateDebut DESC")
+    @Query("SELECT * FROM Pointage ORDER BY id DESC")
     List<Pointage> findAll();
 
     @Query("SELECT * FROM Pointage ORDER BY id DESC LIMIT :limit")
@@ -47,4 +48,6 @@ public  interface DaoPointage {
     @Query("DELETE FROM Pointage")
     void truncateSansRAZId();
 
+    @Update
+    void update(Pointage dernierEnregistrement);
 }

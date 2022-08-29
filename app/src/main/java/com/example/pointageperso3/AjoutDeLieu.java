@@ -25,6 +25,9 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import Entity.Societe;
+import Entity.User;
+import Threads.ImportBDDInfos;
 import adapterViewRecycler.RecyclerViewLieu;
 import Threads.AjoutLieu;
 import Threads.RecupLieu;
@@ -122,6 +125,16 @@ public class AjoutDeLieu extends AppCompatActivity {
     });
 
     Thread recycleurVueMaj = new Thread(() -> {
+        CountDownLatch majAttente = new CountDownLatch(6);
+        ImportBDDInfos majInfosAppli = new ImportBDDInfos(majAttente);
+        new Thread(majInfosAppli).start();
+
+        try {
+            majAttente.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+//        ArrayList<Lieu> tableauLieuPointage = DonneesDeLApplication.getListeDeLieux();
         countDownAjoutLieu = new CountDownLatch(1);
         recupLieux = new RecupLieu(countDownAjoutLieu);
         ArrayList<Lieu> tableauLieuPointage;
@@ -159,7 +172,6 @@ public class AjoutDeLieu extends AppCompatActivity {
                 i++;
             }
         }
-
         if (tableauLieuPointage.size() > 0) {
             dataRecycler = new String[tableauLieuPointage.size()][2];
             for (Lieu lieuPointage : tableauLieuPointage) {
@@ -168,6 +180,7 @@ public class AjoutDeLieu extends AppCompatActivity {
                 i++;
             }
         } else {
+            dataRecycler = new String[1][2];
             dataRecycler[0][0] = "Pas de Lieu";
             dataRecycler[0][1] = "";
         }
