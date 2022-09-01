@@ -7,30 +7,21 @@ import android.icu.text.SimpleDateFormat;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
-import DAO.AccesBDD;
-import DAO.PersoDatabase;
-import Entity.ConfigAppli;
-import Entity.Lieu;
-import Entity.Pointage;
-import Entity.Societe;
-import Entity.User;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -43,14 +34,19 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import DAO.AccesBDD;
+import DAO.PersoDatabase;
+import Entity.ConfigAppli;
+import Entity.Lieu;
+import Entity.Pointage;
+import Entity.Societe;
+import Entity.User;
+import Threads.EnvoieMail;
 import Threads.ImportBDDInfos;
 import adapterViewRecycler.RecyclerView_1_ligne_2_String;
-import Threads.EnvoieMail;
-import Threads.InfoConfigAppli;
-import Threads.RecupUserBDD;
 
 @SuppressWarnings("rawtypes")
-public class PointageFunction extends AppCompatActivity implements RecyclerView_1_ligne_2_String.ListenerDeSelection,LocationListener {
+public class PointageFunction extends AppCompatActivity implements RecyclerView_1_ligne_2_String.ListenerDeSelection, LocationListener {
 
 
     // Récupération Intent
@@ -73,7 +69,6 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
     private Pointage pointageActuel, pointageAInsererAvantPointageActuel, dernierEnregistrement;
     private Date date;
     private ConfigAppli configAppli;
-
 
     private ArrayList<Pointage> listPointage;
     private final SimpleDateFormat formatagedate = new SimpleDateFormat("dd MMMM yyyy HH:mm:ss", Locale.FRANCE);
@@ -109,6 +104,10 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
         fonction = getIntent().getStringExtra("fonction");
     }
 
+    String AUTORISATIONGPSCOARSE = Manifest.permission.ACCESS_COARSE_LOCATION;
+    String AUTORISATIONGPSFIN = Manifest.permission.ACCESS_FINE_LOCATION;
+    int REQUESTCODEVALUE = 100;
+
     private void requestPermissions() {
         ArrayList<String> listPermission = new ArrayList<>();
         String AUTORISATIONLECTURE = Manifest.permission.READ_EXTERNAL_STORAGE;
@@ -120,11 +119,10 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
             listPermission.add(AUTORISATIONECRITURE);
         }
         // Constante acces permissions application
-        String AUTORISATIONGPSCOARSE = Manifest.permission.ACCESS_COARSE_LOCATION;
+
         if (ActivityCompat.checkSelfPermission(MonAppContext.context, AUTORISATIONGPSCOARSE) != PackageManager.PERMISSION_GRANTED) {
             listPermission.add(AUTORISATIONGPSCOARSE);
         }
-        String AUTORISATIONGPSFIN = Manifest.permission.ACCESS_FINE_LOCATION;
         if (ActivityCompat.checkSelfPermission(MonAppContext.context, AUTORISATIONGPSFIN) != PackageManager.PERMISSION_GRANTED) {
             listPermission.add(AUTORISATIONGPSFIN);
         }
@@ -151,7 +149,7 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
             listeAutorisation[i] = listPermission.get(i);
         }
         if (listeAutorisation.length != 0) {
-            int REQUESTCODEVALUE = 100;
+
             ActivityCompat.requestPermissions(PointageFunction.this, listeAutorisation, REQUESTCODEVALUE);
         }
     }
@@ -165,6 +163,19 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
     protected void onResume() {
         recupIntent();
         super.onResume();
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);    //Géo-localisation
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{AUTORISATIONGPSFIN, AUTORISATIONGPSCOARSE}, REQUESTCODEVALUE);
+            return;
+        }
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 10, this);
+        }
+        if (locationManager.isProviderEnabled(LocationManager.PASSIVE_PROVIDER)) {
+            locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 0, 100, this);
+        }
 
         CountDownLatch majAttente = new CountDownLatch(6);
         ImportBDDInfos majInfosAppli = new ImportBDDInfos(majAttente);
@@ -590,7 +601,6 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
             // si tableau vide, début installation programme
 
 // <<<<<<<<<<<<<<<<<<<<<<<<         FIN  TRAITEMENT DE LA 2ND THREAD          >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
             int i = 0;
             dataRecycler = new String[tableauLieuPointage.size()][2];
             for (Lieu lieuPointage : tableauLieuPointage) {
@@ -617,8 +627,15 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
 
         pointageActuel = new Pointage(utilisateur.getId(), utilisateur.getName(), date.getTime(), commentaires, etatPointage);
         pointageActuel.setLieuDePointage(lieuDePointage);
+
+        //Géo-localisation
+
+
+
         pointageActuel.setLatitude(latitude);
         pointageActuel.setLongitude(longitude);
+        //Géo-localisation
+
 
         if (lieuDePointage == 1) {
             Lieu lieuRecup = tableauLieuPointage.get(idPointage);
@@ -706,15 +723,6 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
                 if (listeDePointages.get(i).getEtatJournee() == 1) {
                     pointagePrecedent.append("< - - - - - - - - - - - - - >\n");
                 }
-//                if (i < indice) {
-//                    String date2 = formatagedate2.format(listPointage.get(i + 1).getDateDebut());
-//                    if (!date1.equals(date2)) {
-//                        pointagePrecedent.append("/- - - - - - - - - - - - - - - - - - - - - - - - - - - -/\n");
-//                    }
-//                }
-//                if (i == indice) {
-//                    pointagePrecedent.append("/******************************/\n");
-//                }
             }
 // <<<<<<<<<<<<<<<<<<<<<<<<         FIN  TRAITEMENT DE LA 2ND THREAD          >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -736,7 +744,7 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
 
     CountDownLatch fermetureFenetreToast;
 
-    Thread majInfoAppli = new Thread(() -> {
+        Thread majInfoAppli = new Thread(() -> {
         CountDownLatch majAttente = new CountDownLatch(6);
         ImportBDDInfos majInfosAppli = new ImportBDDInfos(majAttente);
         new Thread(majInfosAppli).start();
@@ -767,43 +775,23 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
             activationBouton();
         });
     });
-
     //Géo-localisation
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
         longitude = location.getLongitude();
         latitude = location.getLatitude();
+        Log.i(getString(R.string.TAG), "\n lat: " + latitude + " \n long: " + longitude);
     }
 
     @Override
-    public void onFlushComplete(int requestCode) {
-        LocationListener.super.onFlushComplete(requestCode);
-    }
+    public void onStatusChanged(String provider, int status, Bundle extras) {}
+    //Géo-localisation
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, new int[]{PackageManager.PERMISSION_GRANTED});
-        if (requestCode != PackageManager.PERMISSION_GRANTED)
-            return;
-        int idxPermFine = -1;
-        for (int i = 0; i < permissions.length && idxPermFine == -1; i++) {
-            if (permissions[i].
-                    equals(Manifest.permission.ACCESS_FINE_LOCATION))
-                idxPermFine = i;
-            grantResults[idxPermFine] = PackageManager.PERMISSION_GRANTED;
-        }
-    }
-
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-        LocationListener.super.onStatusChanged(provider, status, extras);
-        switch (status) {
-            case LocationProvider.AVAILABLE:
-            case LocationProvider.OUT_OF_SERVICE:
-            case LocationProvider.TEMPORARILY_UNAVAILABLE:
-        }
-    }
 }
+
+
+
+
+
+

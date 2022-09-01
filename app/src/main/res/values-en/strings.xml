@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="nom_application">PointagePerso2</string>
+    <string name="nom_application">Personnal check in/out</string>
     <string name="Bonjour">Hello !</string>
     <string name="utilisateur">User</string>
     <string name="mot_de_passe">Password</string>

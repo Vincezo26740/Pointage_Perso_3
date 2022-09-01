@@ -155,8 +155,10 @@
             android:id="@+id/btn_RetourToast"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:background="@drawable/retour"
-            android:foreground="@drawable/retour">
+            android:layout_marginTop="10sp"
+            android:layout_marginLeft="10sp"
+            android:background="@drawable/fermeture"
+            android:foreground="@drawable/fermeture">
 
         </Button>
     </RelativeLayout>
