@@ -1,11 +1,11 @@
 package com.example.pointageperso3.Threads;
 
-import com.example.pointageperso3.function.MonAppContext;
+import com.example.pointageperso3.Entity.User;
 import com.example.pointageperso3.R;
+import com.example.pointageperso3.function.MonAppContext;
 
 import java.util.concurrent.CountDownLatch;
 
-import com.example.pointageperso3.Entity.User;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 
 public class ControleUser extends Thread {

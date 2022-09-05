@@ -1,10 +1,5 @@
 package com.example.pointageperso3.Threads;
 
-import com.example.pointageperso3.function.DonneesDeLApplication;
-
-import java.util.ArrayList;
-import java.util.concurrent.CountDownLatch;
-
 import com.example.pointageperso3.DAO.AccesBDD;
 import com.example.pointageperso3.DAO.PersoDatabase;
 import com.example.pointageperso3.Entity.ConfigAppli;
@@ -12,6 +7,10 @@ import com.example.pointageperso3.Entity.Lieu;
 import com.example.pointageperso3.Entity.Pointage;
 import com.example.pointageperso3.Entity.Societe;
 import com.example.pointageperso3.Entity.User;
+import com.example.pointageperso3.function.DonneesDeLApplication;
+
+import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
 
 public class ImportBDDInfos implements Runnable {
 

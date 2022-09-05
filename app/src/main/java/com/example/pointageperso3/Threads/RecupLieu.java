@@ -1,11 +1,11 @@
 package com.example.pointageperso3.Threads;
 
-import java.util.ArrayList;
-import java.util.concurrent.CountDownLatch;
-
 import com.example.pointageperso3.DAO.AccesBDD;
 import com.example.pointageperso3.DAO.PersoDatabase;
 import com.example.pointageperso3.Entity.Lieu;
+
+import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
 
 public class RecupLieu extends Thread {
 

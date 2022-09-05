@@ -6,7 +6,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.example.pointageperso3"
+        applicationId 'com.example.pointageperso3'
         minSdk 26
         targetSdk 31
         versionCode 1

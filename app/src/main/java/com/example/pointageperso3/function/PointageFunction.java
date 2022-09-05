@@ -1,7 +1,6 @@
 package com.example.pointageperso3.function;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.icu.text.SimpleDateFormat;
@@ -11,15 +10,12 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.telephony.CarrierConfigManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,19 +23,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
-import java.io.File;
-import java.security.AuthProvider;
-import java.security.Provider;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import com.example.pointageperso3.BuildConfig;
 import com.example.pointageperso3.DAO.AccesBDD;
@@ -53,6 +36,16 @@ import com.example.pointageperso3.R;
 import com.example.pointageperso3.Threads.EnvoieMail;
 import com.example.pointageperso3.Threads.ImportBDDInfos;
 import com.example.pointageperso3.adapterViewRecycler.RecyclerView_1_ligne_2_String;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("rawtypes")
 public class PointageFunction extends AppCompatActivity implements RecyclerView_1_ligne_2_String.ListenerDeSelection, LocationListener {

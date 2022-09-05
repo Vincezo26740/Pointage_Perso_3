@@ -7,10 +7,10 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.concurrent.CountDownLatch;
-
 import com.example.pointageperso3.R;
 import com.example.pointageperso3.Threads.ImportBDDInfos;
+
+import java.util.concurrent.CountDownLatch;
 
 public class Chargement_appli extends AppCompatActivity {
 

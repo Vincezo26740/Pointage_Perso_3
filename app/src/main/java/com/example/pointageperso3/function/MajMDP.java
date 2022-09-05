@@ -14,8 +14,6 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.concurrent.CountDownLatch;
-
 import com.example.pointageperso3.DAO.AccesBDD;
 import com.example.pointageperso3.DAO.PersoDatabase;
 import com.example.pointageperso3.Entity.ConfigAppli;
@@ -23,6 +21,9 @@ import com.example.pointageperso3.Entity.User;
 import com.example.pointageperso3.R;
 import com.example.pointageperso3.Threads.ImportBDDInfos;
 import com.example.pointageperso3.Threads.RecupUserBDD;
+
+import java.util.concurrent.CountDownLatch;
+
 import at.favre.lib.crypto.bcrypt.BCrypt;
 
 public class MajMDP extends AppCompatActivity {

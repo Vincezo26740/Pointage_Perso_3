@@ -16,11 +16,6 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ArrayList;
-import java.util.concurrent.CountDownLatch;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import com.example.pointageperso3.DAO.AccesBDD;
 import com.example.pointageperso3.DAO.PersoDatabase;
 import com.example.pointageperso3.Entity.ConfigAppli;
@@ -29,6 +24,11 @@ import com.example.pointageperso3.Entity.Pointage;
 import com.example.pointageperso3.Entity.Societe;
 import com.example.pointageperso3.Entity.User;
 import com.example.pointageperso3.R;
+
+import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class EcranDeConnexion extends AppCompatActivity {
     private final String TAG = MonAppContext.context.getString(R.string.TAG);

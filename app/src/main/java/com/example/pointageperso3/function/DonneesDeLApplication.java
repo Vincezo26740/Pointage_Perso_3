@@ -1,12 +1,12 @@
 package com.example.pointageperso3.function;
 
-import java.util.ArrayList;
-
 import com.example.pointageperso3.Entity.ConfigAppli;
 import com.example.pointageperso3.Entity.Lieu;
 import com.example.pointageperso3.Entity.Pointage;
 import com.example.pointageperso3.Entity.Societe;
 import com.example.pointageperso3.Entity.User;
+
+import java.util.ArrayList;
 
 public class DonneesDeLApplication {
 

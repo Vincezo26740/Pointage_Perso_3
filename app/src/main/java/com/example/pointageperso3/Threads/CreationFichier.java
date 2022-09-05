@@ -3,9 +3,16 @@ package com.example.pointageperso3.Threads;
 import android.icu.text.SimpleDateFormat;
 import android.os.Environment;
 
+import com.example.pointageperso3.DAO.AccesBDD;
+import com.example.pointageperso3.DAO.PersoDatabase;
+import com.example.pointageperso3.Entity.ConfigAppli;
+import com.example.pointageperso3.Entity.Lieu;
+import com.example.pointageperso3.Entity.Pointage;
+import com.example.pointageperso3.Entity.Societe;
+import com.example.pointageperso3.Entity.User;
+import com.example.pointageperso3.R;
 import com.example.pointageperso3.function.DonneesDeLApplication;
 import com.example.pointageperso3.function.MonAppContext;
-import com.example.pointageperso3.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -15,14 +22,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CountDownLatch;
-
-import com.example.pointageperso3.DAO.AccesBDD;
-import com.example.pointageperso3.DAO.PersoDatabase;
-import com.example.pointageperso3.Entity.ConfigAppli;
-import com.example.pointageperso3.Entity.Lieu;
-import com.example.pointageperso3.Entity.Pointage;
-import com.example.pointageperso3.Entity.Societe;
-import com.example.pointageperso3.Entity.User;
 
 
 public class CreationFichier extends Thread {

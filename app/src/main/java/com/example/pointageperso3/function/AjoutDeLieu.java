@@ -13,14 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.BlockingDeque;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
 import com.example.pointageperso3.DAO.AccesBDD;
 import com.example.pointageperso3.DAO.PersoDatabase;
 import com.example.pointageperso3.Entity.Lieu;
@@ -29,6 +21,14 @@ import com.example.pointageperso3.Threads.AjoutLieu;
 import com.example.pointageperso3.Threads.ImportBDDInfos;
 import com.example.pointageperso3.Threads.RecupLieu;
 import com.example.pointageperso3.adapterViewRecycler.RecyclerViewLieu;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class AjoutDeLieu extends AppCompatActivity {
 

@@ -1,14 +1,13 @@
 package com.example.pointageperso3.Threads;
 
-import com.example.pointageperso3.function.MonAppContext;
-import com.example.pointageperso3.R;
-
-import java.io.File;
-import java.util.concurrent.CountDownLatch;
-
 import com.example.pointageperso3.DAO.AccesBDD;
 import com.example.pointageperso3.Entity.Societe;
 import com.example.pointageperso3.Entity.User;
+import com.example.pointageperso3.R;
+import com.example.pointageperso3.function.MonAppContext;
+
+import java.io.File;
+import java.util.concurrent.CountDownLatch;
 
 public class EnvoieMail extends Thread {
     private static File pathFichier;

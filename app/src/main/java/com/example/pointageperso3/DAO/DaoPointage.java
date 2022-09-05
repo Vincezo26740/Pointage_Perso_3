@@ -6,10 +6,10 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import com.example.pointageperso3.Entity.Pointage;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.example.pointageperso3.Entity.Pointage;
 
 @Dao
 public  interface DaoPointage {

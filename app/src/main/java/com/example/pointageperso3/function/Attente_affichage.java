@@ -8,14 +8,14 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.pointageperso3.R;
+import com.example.pointageperso3.Threads.ControleUser;
+import com.example.pointageperso3.Threads.EnvoieMail;
+
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import com.example.pointageperso3.R;
-import com.example.pointageperso3.Threads.ControleUser;
-import com.example.pointageperso3.Threads.EnvoieMail;
 
 public class Attente_affichage extends AppCompatActivity {
 

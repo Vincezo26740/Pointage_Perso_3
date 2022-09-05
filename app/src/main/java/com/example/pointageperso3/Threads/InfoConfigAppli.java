@@ -1,10 +1,10 @@
 package com.example.pointageperso3.Threads;
 
-import java.util.concurrent.CountDownLatch;
-
 import com.example.pointageperso3.DAO.AccesBDD;
 import com.example.pointageperso3.DAO.PersoDatabase;
 import com.example.pointageperso3.Entity.ConfigAppli;
+
+import java.util.concurrent.CountDownLatch;
 
 public class InfoConfigAppli extends Thread {
     private  ConfigAppli infoConfigAppli;

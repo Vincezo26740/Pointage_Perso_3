@@ -6,12 +6,11 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import com.example.pointageperso3.function.MonAppContext;
+import com.example.pointageperso3.DAO.AccesBDD;
 import com.example.pointageperso3.R;
+import com.example.pointageperso3.function.MonAppContext;
 
 import java.util.Locale;
-
-import com.example.pointageperso3.DAO.AccesBDD;
 
 @Entity
 public class Pointage {

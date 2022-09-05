@@ -16,10 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import com.example.pointageperso3.Entity.Lieu;
 import com.example.pointageperso3.Entity.Societe;
 import com.example.pointageperso3.Entity.User;
@@ -29,6 +25,10 @@ import com.example.pointageperso3.Threads.ImportBDDInfos;
 import com.example.pointageperso3.Threads.MajSociete;
 import com.example.pointageperso3.Threads.MajUser;
 import com.example.pointageperso3.Threads.RecupLieu;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Parametres extends AppCompatActivity {
 
