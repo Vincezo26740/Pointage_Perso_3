@@ -117,6 +117,8 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
     String AUTORISATIONGPSFIN = Manifest.permission.ACCESS_FINE_LOCATION;
     int REQUESTCODEVALUE = 100;
 
+    CountDownLatch majInfoBdd;
+
     private void requestPermissions() {
         ArrayList<String> listPermission = new ArrayList<>();
         String AUTORISATIONLECTURE = Manifest.permission.READ_EXTERNAL_STORAGE;
@@ -185,20 +187,14 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
             locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 0, 100, this);
         }
 
-        CountDownLatch majAttente = new CountDownLatch(6);
-        ImportBDDInfos majInfosAppli = new ImportBDDInfos(majAttente);
-        new Thread(majInfosAppli).start();
-        utilisateur = DonneesDeLApplication.getUtilisateur();
-        societe = DonneesDeLApplication.getSociete();
-        confAppli = DonneesDeLApplication.getConfAppli();
-        listeDesUtilisateurs = DonneesDeLApplication.getListeDesUtilisateurs();
-        listeDePointages = DonneesDeLApplication.getListeDePointages();
-        listeDeLieux = DonneesDeLApplication.getListeDeLieux();
+        majInfoBdd = new CountDownLatch(1);
+        new Thread(majInfoAppli).start();
         try {
-            majAttente.await();
+            majInfoBdd.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         bienvenueUser = getString(R.string.pointage_de) + " \n" + utilisateur.getFirstName();
         setContentView(R.layout.accueil);
 
@@ -699,20 +695,15 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
                 BDD.close();
             }
 
-            CountDownLatch majAttente = new CountDownLatch(6);
-            ImportBDDInfos majInfosAppli = new ImportBDDInfos(majAttente);
-            new Thread(majInfosAppli).start();
-            utilisateur = DonneesDeLApplication.getUtilisateur();
-            societe = DonneesDeLApplication.getSociete();
-            confAppli = DonneesDeLApplication.getConfAppli();
-            listeDesUtilisateurs = DonneesDeLApplication.getListeDesUtilisateurs();
-            listeDePointages = DonneesDeLApplication.getListeDePointages();
-            listeDeLieux = DonneesDeLApplication.getListeDeLieux();
+            majInfoBdd = new CountDownLatch(1);
+            new Thread(majInfoAppli).start();
             try {
-                majAttente.await();
+                majInfoBdd.await();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
+//
 // <<<<<<<<<<<<<<<<<<<<<<<<         FIN  TRAITEMENT DE LA 2ND THREAD          >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             //Post traitement
             etatPointage = lieuDePointage = idPointage = 0;
@@ -778,7 +769,9 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        majInfoBdd.countDown();
     });
+
     //Thread durée affichage pointage
     Thread toastCompteur = new Thread(() -> {
         int compteur = 20;
@@ -806,7 +799,6 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
     }
-    //Géo-localisation
 
     @Override
     public void onProviderDisabled(@NonNull String provider) {
@@ -819,6 +811,8 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
 //        LocationListener.super.onProviderEnabled(provider);
         Log.i(getString(R.string.TAG), "onProviderEnabled: ");
     }
+    //Géo-localisation
+
 }
 
 
