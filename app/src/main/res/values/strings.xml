@@ -94,4 +94,6 @@
     <string name="pointage_de">Pointage de</string>
     <string name="fin_pointage_precedent">Fin du pointage précédent</string>
     <string name="text_de_base">text de base</string>
+    <string name="suppressionGPS">Attention, désactivation du GPS</string>
+    <string name="activationGPS">Activation du GPS</string>
 </resources>

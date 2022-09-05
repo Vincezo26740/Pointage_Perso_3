@@ -7,7 +7,7 @@
     android:layout_marginHorizontal="5dp"
     android:layout_marginVertical="5dp"
     android:visibility="visible"
-    tools:context=".PointageFunction">
+    tools:context=".function.PointageFunction">
 
     <RelativeLayout
         android:id="@+id/LL_parent"

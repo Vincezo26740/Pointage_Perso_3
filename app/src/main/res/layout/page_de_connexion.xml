@@ -6,7 +6,7 @@
     android:layout_marginHorizontal="15dp"
     android:layout_marginVertical="5dp"
     android:background="@drawable/_background_general"
-    tools:context=".EcranDeConnexion">
+    tools:context=".function.EcranDeConnexion">
 
     <RelativeLayout
         android:id="@+id/page_connexion_init"

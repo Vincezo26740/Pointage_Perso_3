@@ -12,10 +12,10 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS"/>
 
     <application
-        android:name=".MonAppContext"
+        android:name=".function.MonAppContext"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -38,7 +38,7 @@
         </provider>
 
         <activity
-            android:name=".Chargement_appli"
+            android:name=".function.Chargement_appli"
             android:exported="true"
             android:rotationAnimation="rotate"
             android:screenOrientation="sensorPortrait"
@@ -50,39 +50,37 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PointageFunction"
+            android:name=".function.PointageFunction"
             android:exported="true"
             android:rotationAnimation="rotate"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".Parametres"
+            android:name=".function.Parametres"
             android:exported="true"
             android:rotationAnimation="rotate"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".EcranDeConnexion"
+            android:name=".function.EcranDeConnexion"
             android:exported="true"
             android:rotationAnimation="rotate"
             android:screenOrientation="sensorPortrait" />
 
         <activity
-            android:name=".MajMDP"
+            android:name=".function.MajMDP"
             android:exported="true"
             android:rotationAnimation="rotate"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".AjoutDeLieu"
+            android:name=".function.AjoutDeLieu"
             android:exported="true"
             android:rotationAnimation="rotate"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".Attente_affichage"
+            android:name=".function.Attente_affichage"
             android:exported="true"
             android:rotationAnimation="rotate"
             android:screenOrientation="sensorPortrait" />
-
     </application>
-
 </manifest>
