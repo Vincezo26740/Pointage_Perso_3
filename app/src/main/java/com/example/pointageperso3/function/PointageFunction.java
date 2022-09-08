@@ -47,7 +47,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-@SuppressWarnings("rawtypes")
+//@SuppressWarnings("rawtypes")
 public class PointageFunction extends AppCompatActivity implements RecyclerView_1_ligne_2_String.ListenerDeSelection, LocationListener {
 
 
@@ -433,13 +433,9 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
         }
         if (listeDePointages.size() > 0) {
             String dernierEnregistrementBDD = listeDePointages.get(0).toString();
-            runOnUiThread(() -> {
-                tvDernierPointage.setText(dernierEnregistrementBDD);
-            });
+            runOnUiThread(() -> tvDernierPointage.setText(dernierEnregistrementBDD));
         } else {
-            runOnUiThread(() -> {
-                tvDernierPointage.setText(getString(R.string.pas_de_pointage));
-            });
+            runOnUiThread(() -> tvDernierPointage.setText(getString(R.string.pas_de_pointage)));
         }
     });
 
@@ -667,25 +663,22 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
 //            ArrayList<Pointage> pointagesAEnregistre = new ArrayList<>();
             if (recupDernierPointage != null) {
                 dernierEnregistrement = recupDernierPointage;
-                switch (pointageActuel.getEtatPointage()) {
-                    case 2:
-                        commentaires = dernierEnregistrement.getCommentaires() + " \n" + pointageActuel.getCommentaires();
-                        if (pointageActuel.getLongitude() != 0 && pointageActuel.getLatitude() != 0) {
-                            dernierEnregistrement.setLongitude(pointageActuel.getLongitude());
-                            dernierEnregistrement.setLatitude(pointageActuel.getLatitude());
-                        }
-                        dernierEnregistrement.setDateFin(pointageActuel.getDateDebut());
-                        dernierEnregistrement.setCommentaires(commentaires);
-                        BDD.DaoPointage().update(dernierEnregistrement);
-                        BDD.close();
-                        break;
-                    default:
-                        if (pointageActuel.getEtatPointage() != 1) {
-                            pointageActuel.setDateFin(pointageActuel.getDateDebut() + 1);
-                        }
-                        BDD.DaoPointage().insertPointageEntity(pointageActuel);
-                        BDD.close();
-                        break;
+                if (pointageActuel.getEtatPointage() == 2) {
+                    commentaires = dernierEnregistrement.getCommentaires() + " \n" + pointageActuel.getCommentaires();
+                    if (pointageActuel.getLongitude() != 0 && pointageActuel.getLatitude() != 0) {
+                        dernierEnregistrement.setLongitude(pointageActuel.getLongitude());
+                        dernierEnregistrement.setLatitude(pointageActuel.getLatitude());
+                    }
+                    dernierEnregistrement.setDateFin(pointageActuel.getDateDebut());
+                    dernierEnregistrement.setCommentaires(commentaires);
+                    BDD.DaoPointage().update(dernierEnregistrement);
+                    BDD.close();
+                } else {
+                    if (pointageActuel.getEtatPointage() != 1) {
+                        pointageActuel.setDateFin(pointageActuel.getDateDebut() + 1);
+                    }
+                    BDD.DaoPointage().insertPointageEntity(pointageActuel);
+                    BDD.close();
                 }
             } else {
                 BDD.DaoPointage().insertPointageEntity(pointageActuel);
@@ -774,7 +767,7 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
         int compteur = 20;
         boolean fin = false;
         try {
-            fermetureFenetreToast.await(20, TimeUnit.SECONDS);
+            boolean await = fermetureFenetreToast.await(20, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
