@@ -166,7 +166,8 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
     protected void onResume() {
         recupIntent();
         super.onResume();
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);    //Géo-localisation
+//        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);    //Géo-localisation
+        LocationManager locationManager ;    //Géo-localisation
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{AUTORISATIONGPSFIN, AUTORISATIONGPSCOARSE}, REQUESTCODEVALUE);
