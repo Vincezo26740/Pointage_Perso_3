@@ -86,7 +86,7 @@ public class MajMDP extends AppCompatActivity {
             vueSaisieMdpDesactivation();
 
             findViewById(R.id.btn_validation_username).setOnClickListener(v -> {
-                user = escapeHtml(userET.getAutofillValue().getTextValue().toString());
+                user = escapeHtml(userET.getText().toString());
 
                 RecupUserBDD recupUserBDD = new RecupUserBDD(user, recupUser);
                 new Thread(recupUserBDD).start();
@@ -180,7 +180,7 @@ public class MajMDP extends AppCompatActivity {
                 if (testValidationLongueur && testValidationMajuscule &&
                         testValidationChiffres && testValidationCarSpec &&
                         testValidationEspace) {
-                    passWord1 = escapeHtml(passWord1ET.getAutofillValue().getTextValue().toString());
+                    passWord1 = escapeHtml(passWord1ET.getText().toString());
                     passWord1OK = true;
                 } else {
                     passWord1OK = false;
@@ -200,7 +200,7 @@ public class MajMDP extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                passWord2 = escapeHtml(passWord2ET.getAutofillValue().getTextValue().toString());
+                passWord2 = escapeHtml(passWord2ET.getText().toString());
                 if (passWord1.equals(passWord2)) {
                     activationBoutonValider();
                     passWord1EgalspassWord2 = true;

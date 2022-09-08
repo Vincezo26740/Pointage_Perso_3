@@ -56,7 +56,7 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
 
     private CountDownLatch retourUser, retourConfig, retourDernierPointage;
 
-    private TextView title, tvDernierPointage;
+    private TextView title, tvDernierPointage, commentairesTV;
     private Button absence, debutPointageButton, finPointageButton,
             parametres, creationFichier, validationPointage,
             retour, checkPointage = null, nouveauLieu;
@@ -68,7 +68,7 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
     private int etatPointage, idPointage, lieuDePointage;
 
     private User utilisateur;
-    private Pointage pointageActuel, pointageAInsererAvantPointageActuel, dernierEnregistrement;
+    private Pointage pointageActuel, dernierEnregistrement;
     private Date date;
 
 
@@ -84,11 +84,11 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
 
     //****************//
 //    User utilisateur;
-    Societe societe;
-    ConfigAppli confAppli;
-    ArrayList<User> listeDesUtilisateurs;
-    ArrayList<Pointage> listeDePointages;
-    ArrayList<Lieu> listeDeLieux;
+    private Societe societe;
+    private ConfigAppli confAppli;
+    private ArrayList<User> listeDesUtilisateurs;
+    private ArrayList<Pointage> listeDePointages;
+    private ArrayList<Lieu> listeDeLieux;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -134,9 +134,11 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
         if (ActivityCompat.checkSelfPermission(MonAppContext.context, AUTORISATIONTELEPHONE) != PackageManager.PERMISSION_GRANTED) {
             listPermission.add(AUTORISATIONTELEPHONE);
         }
-        String AUTORISATIONLECTURETELEPHONENUMERO = Manifest.permission.READ_PHONE_NUMBERS;
-        if (ActivityCompat.checkSelfPermission(MonAppContext.context, AUTORISATIONLECTURETELEPHONENUMERO) != PackageManager.PERMISSION_GRANTED) {
-            listPermission.add(AUTORISATIONLECTURETELEPHONENUMERO);
+        if (Build.VERSION.SDK_INT >= 26) {
+            String AUTORISATIONLECTURETELEPHONENUMERO = Manifest.permission.READ_PHONE_NUMBERS;
+            if (ActivityCompat.checkSelfPermission(MonAppContext.context, AUTORISATIONLECTURETELEPHONENUMERO) != PackageManager.PERMISSION_GRANTED) {
+                listPermission.add(AUTORISATIONLECTURETELEPHONENUMERO);
+            }
         }
         String AUTORISATIONSMS = Manifest.permission.SEND_SMS;
         if (ActivityCompat.checkSelfPermission(MonAppContext.context, AUTORISATIONSMS) != PackageManager.PERMISSION_GRANTED) {
@@ -415,7 +417,8 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
     }
 
     private void validationAbsenceDetail(View view) {
-        commentaires = commentaires + findViewById(R.id.ET_abcenceAutre).getAutofillValue().getTextValue();
+        commentairesTV = findViewById(R.id.ET_abcenceAutre);
+        commentaires = commentaires + commentairesTV.getText();
         creationPointage();
     }
 
@@ -550,7 +553,8 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
     }
 
     private void enregistrementAutreRaison(View view) {
-        commentaires = findViewById(R.id.et_raison_autre).getAutofillValue().getTextValue().toString();
+        commentairesTV = findViewById(R.id.et_raison_autre);
+        commentaires = commentairesTV.getText().toString();
         creationPointage();
     }
 

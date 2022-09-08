@@ -284,7 +284,7 @@ public class Parametres extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!name.getAutofillValue().getTextValue().toString().isEmpty()) {
+                if (!name.getText().toString().isEmpty()) {
                     nameUserOk = true;
                     controleValidationVisible();
                 } else {
@@ -306,7 +306,7 @@ public class Parametres extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!adresse.getAutofillValue().getTextValue().toString().isEmpty()) {
+                if (!adresse.getText().toString().isEmpty()) {
                     adresseUserOk = true;
                     controleValidationVisible();
                 } else {
@@ -352,7 +352,7 @@ public class Parametres extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!town.getAutofillValue().getTextValue().toString().isEmpty()) {
+                if (!town.getText().toString().isEmpty()) {
                     villeUserOk = true;
                     controleValidationVisible();
                 } else {
@@ -403,7 +403,7 @@ public class Parametres extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
 
-                if (!prenom.getAutofillValue().getTextValue().toString().isEmpty()) {
+                if (!prenom.getText().toString().isEmpty()) {
                     prenom.setTextColor(getColor(R.color.black));
                     prenomUserOk = true;
                     controleValidationVisible();
@@ -430,12 +430,19 @@ public class Parametres extends AppCompatActivity {
     }
 
     private void miseAJourUtilisateur(View view) {
-        nomUser = findViewById(R.id.maj_nom).getAutofillValue().getTextValue().toString();
-        adresseUser = findViewById(R.id.maj_adresse).getAutofillValue().getTextValue().toString();
-        CPUser = findViewById(R.id.maj_CP).getAutofillValue().getTextValue().toString();
-        villeUser = findViewById(R.id.maj_town).getAutofillValue().getTextValue().toString();
-        emailUser = findViewById(R.id.maj_email).getAutofillValue().getTextValue().toString();
-        prenomUser = findViewById(R.id.maj_prenom).getAutofillValue().getTextValue().toString();
+        TextView nomUserTV = findViewById(R.id.maj_nom),
+                adresseUserTV = findViewById(R.id.maj_adresse),
+                CPUserTV = findViewById(R.id.maj_CP),
+                villeUserTV = findViewById(R.id.maj_town),
+                emailUserTV = findViewById(R.id.maj_email),
+                prenomUserTV = findViewById(R.id.maj_prenom);
+
+        nomUser = nomUserTV.getText().toString();
+        adresseUser = adresseUserTV.getText().toString();
+        CPUser = CPUserTV.getText().toString();
+        villeUser = villeUserTV.getText().toString();
+        emailUser = emailUserTV.getText().toString();
+        prenomUser = prenomUserTV.getText().toString();
 
         userEntityBDD.setName(nomUser);
         userEntityBDD.setFirstName(prenomUser);
@@ -455,18 +462,22 @@ public class Parametres extends AppCompatActivity {
 
     private void validationSociete(View view) {
 
-        TextView mail1 = findViewById(R.id.email1_societe);
-        TextView mail2 = findViewById(R.id.email2_societe);
-        TextView mail3 = findViewById(R.id.email3_societe);
+        TextView nomSocieteTV = findViewById(R.id.nom_Societe),
+                adresseSocieteTV = findViewById(R.id.adresse_societe),
+                codePostalSocieteTV = findViewById(R.id.CP_societe),
+                villeSocieteTV = findViewById(R.id.town_societe),
+                mail1 = findViewById(R.id.email1_societe),
+                mail2 = findViewById(R.id.email2_societe),
+                mail3 = findViewById(R.id.email3_societe);
         String textToast = "Mise à jour de votre société";
-        email1Societe = mail1.getAutofillValue().getTextValue().toString();
-        email2Societe = mail2.getAutofillValue().getTextValue().toString();
-        email3Societe = mail3.getAutofillValue().getTextValue().toString();
+        email1Societe = mail1.getText().toString();
+        email2Societe = mail2.getText().toString();
+        email3Societe = mail3.getText().toString();
 
-        nomSociete = findViewById(R.id.nom_Societe).getAutofillValue().getTextValue().toString();
-        adresseSociete = findViewById(R.id.adresse_societe).getAutofillValue().getTextValue().toString();
-        codePostalSociete = Integer.parseInt(findViewById(R.id.CP_societe).getAutofillValue().getTextValue().toString());
-        villeSociete = findViewById(R.id.town_societe).getAutofillValue().getTextValue().toString();
+        nomSociete = nomSocieteTV.getText().toString();
+        adresseSociete = adresseSocieteTV.getText().toString();
+        codePostalSociete = Integer.parseInt(codePostalSocieteTV.getText().toString());
+        villeSociete = villeSocieteTV.getText().toString();
         newSociete = new Societe(codePostalSociete, nomSociete, adresseSociete, villeSociete, email1Societe);
 
         new Thread(ajoutSociete).start();
@@ -537,7 +548,7 @@ public class Parametres extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!nameSociete.getAutofillValue().getTextValue().toString().isEmpty()) {
+                if (!nameSociete.getText().toString().isEmpty()) {
                     nameOk = true;
                     controleModifText();
                 } else {
@@ -559,7 +570,7 @@ public class Parametres extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!adresseSociete.getAutofillValue().getTextValue().toString().isEmpty()) {
+                if (!adresseSociete.getText().toString().isEmpty()) {
                     adresseOk = true;
                     controleModifText();
                 } else {
@@ -605,7 +616,7 @@ public class Parametres extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!townSociete.getAutofillValue().getTextValue().toString().isEmpty()) {
+                if (!townSociete.getText().toString().isEmpty()) {
                     villeOk = true;
                     controleModifText();
                 } else {

@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -211,7 +212,7 @@ public class AjoutDeLieu extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 if (!s.toString().isEmpty()) {
                     nomLieuBoolean = true;
-                    nomLieu = nameLieu.getAutofillValue().getTextValue().toString();
+                    nomLieu =((TextView) nameLieu).getText().toString();
                     controleLieuValidation();
                 } else {
                     nomLieuBoolean = false;
@@ -234,7 +235,7 @@ public class AjoutDeLieu extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 if (!s.toString().isEmpty()) {
                     adresseLieuBoolean = true;
-                    adresseLieu = adresseLieuET.getAutofillValue().getTextValue().toString();
+                    adresseLieu = adresseLieuET.getText().toString();
                     controleLieuValidation();
                 } else {
                     adresseLieuBoolean = false;
@@ -258,7 +259,7 @@ public class AjoutDeLieu extends AppCompatActivity {
                 if (s.toString().length() > 4) {
                     CPLieu.setTextColor(getColor(R.color.black));
                     CPLieuBoolean = true;
-                    codePostalLieu = Integer.parseInt(CPLieu.getAutofillValue().getTextValue().toString());
+                    codePostalLieu = Integer.parseInt(CPLieu.getText().toString());
                     controleLieuValidation();
                 } else {
                     CPLieu.setTextColor(getColor(R.color.red));
@@ -282,7 +283,7 @@ public class AjoutDeLieu extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 if (!s.toString().isEmpty()) {
                     villeLieuBoolean = true;
-                    villeLieu = villeLieuET.getAutofillValue().getTextValue().toString();
+                    villeLieu = villeLieuET.getText().toString();
                     controleLieuValidation();
                 } else {
                     villeLieuBoolean = false;

@@ -47,9 +47,11 @@ public class EcranDeConnexion extends AppCompatActivity {
     private Button validationUser, viewMdp;
     private String nameUser, passWordUser;
     private User utilisateurRecupImportBDD;
+    private TextView nameTV, passWordTV;
+
 
     // Gestion de la vue création nouvel utilisateur
-    private TextView nameNewUser, emailNewUser, adresseNewUser, villeNewUser, CPNewUser;
+    private TextView nameNewUser,prenomNewUser, emailNewUser, adresseNewUser, villeNewUser, CPNewUser;
     private boolean nameOk, emailOK, adresseOk, CPOk, villeOk;
     private Button validationNewUser;
 
@@ -88,12 +90,14 @@ public class EcranDeConnexion extends AppCompatActivity {
             setContentView(R.layout.page_de_connexion);
             oubliePassWord = findViewById(R.id.tv_oublieMdp);
             passWord = findViewById(R.id.et_mdp);
+            passWordTV = (TextView) passWord;
             name = findViewById(R.id.et_username);
+            nameTV = (TextView) name;
             validationUser = findViewById(R.id.btn_validation_connexion);
             viewMdp = findViewById(R.id.btn_view_mdp);
 
-            nameUser = escapeHtml(name.getAutofillValue().getTextValue().toString());
-            passWordUser = escapeHtml(passWord.getAutofillValue().getTextValue().toString());
+            nameUser = escapeHtml(nameTV.getText().toString());
+            passWordUser = escapeHtml(passWordTV.getText().toString());
 
             // afffectation des fonction
             validationUser.setOnClickListener(this::ValidationUser);
@@ -169,13 +173,13 @@ public class EcranDeConnexion extends AppCompatActivity {
     //insertion nouvel utilisateur dans la BDD / mot de passe pas encore configuré
     Thread ajoutNewUser = new Thread(() -> {
 
-        User nouvelUtilisateur = new User(escapeHtml(nameNewUser.getAutofillValue().getTextValue().toString()),
-                escapeHtml(emailNewUser.getAutofillValue().getTextValue().toString()),
-                escapeHtml(adresseNewUser.getAutofillValue().getTextValue().toString()),
-                Integer.parseInt(escapeHtml(CPNewUser.getAutofillValue().getTextValue().toString())),
-                escapeHtml(villeNewUser.getAutofillValue().getTextValue().toString()),
+        User nouvelUtilisateur = new User(escapeHtml(nameNewUser.getText().toString()),
+                escapeHtml(emailNewUser.getText().toString()),
+                escapeHtml(adresseNewUser.getText().toString()),
+                Integer.parseInt(escapeHtml(CPNewUser.getText().toString())),
+                escapeHtml(villeNewUser.getText().toString()),
                 "");
-        nouvelUtilisateur.setFirstName(escapeHtml(findViewById(R.id.insert_prenom).getAutofillValue().getTextValue().toString()));
+        nouvelUtilisateur.setFirstName(escapeHtml(prenomNewUser.getText().toString()));
         PersoDatabase insertUser = AccesBDD.getConnexionBDD();
         insertUser.DaoUser().insert(nouvelUtilisateur);
         insertUser.DaoConfigAppli().majFirstUse(false);
@@ -188,6 +192,7 @@ public class EcranDeConnexion extends AppCompatActivity {
         setContentView(R.layout.creation_first_user);
 
         nameNewUser = findViewById(R.id.insert_nom);
+        prenomNewUser = findViewById(R.id.insert_prenom);
         emailNewUser = findViewById(R.id.insert_email);
         adresseNewUser = findViewById(R.id.insert_adresse);
         CPNewUser = findViewById(R.id.insert_CP);
@@ -327,7 +332,7 @@ public class EcranDeConnexion extends AppCompatActivity {
         }
 
         Intent envoieDonnee = new Intent(this, MajMDP.class);
-        nameUser = nameNewUser.getAutofillValue().getTextValue().toString();
+        nameUser = nameNewUser.getText().toString();
         envoieDonnee.putExtra("user", nameUser);
         envoieDonnee.putExtra("password", "");
         envoieDonnee.putExtra("class", getClass().getName());
@@ -341,8 +346,8 @@ public class EcranDeConnexion extends AppCompatActivity {
     public void ValidationUser(View view) {
         validationUser.setClickable(false);
         validationUser.setOnClickListener(null);
-        nameUser = escapeHtml(findViewById(R.id.et_username).getAutofillValue().getTextValue().toString());
-        passWordUser = findViewById(R.id.et_mdp).getAutofillValue().getTextValue().toString();
+        nameUser = escapeHtml(((TextView)findViewById(R.id.et_username)).getText().toString());
+        passWordUser = ((TextView)findViewById(R.id.et_mdp)).getText().toString();
 
         if (nameUser.isEmpty() || passWordUser.isEmpty()) {
             erreurConnexion = true;
