@@ -5,7 +5,9 @@ import static android.text.Html.escapeHtml;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -127,6 +129,8 @@ public class MajMDP extends AppCompatActivity {
         vueSaisieUsernameDesactivation();
         vueSaisieMdpActivation();
         validationChgtPassWord.setVisibility(View.INVISIBLE);
+        TextView affichageMDP = findViewById(R.id.affichage_mdp);
+
         passWord1ET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -177,14 +181,17 @@ public class MajMDP extends AppCompatActivity {
                         testValidationCarSpec = false;
                     }
                 }
+
+
                 if (testValidationLongueur && testValidationMajuscule &&
                         testValidationChiffres && testValidationCarSpec &&
                         testValidationEspace) {
-                    passWord1 = escapeHtml(passWord1ET.getText().toString());
                     passWord1OK = true;
                 } else {
                     passWord1OK = false;
                 }
+                passWord1 = escapeHtml(passWord1ET.getText().toString());
+                activationBoutonValider();
             }
         });
         passWord2ET.addTextChangedListener(new TextWatcher() {
@@ -201,19 +208,47 @@ public class MajMDP extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 passWord2 = escapeHtml(passWord2ET.getText().toString());
-                if (passWord1.equals(passWord2)) {
-                    activationBoutonValider();
-                    passWord1EgalspassWord2 = true;
-                } else {
-                    passWord1EgalspassWord2 = false;
-                }
+                activationBoutonValider();
+            }
+        });
+        affichageMDP.setOnClickListener(v -> {
+            if (passWord1ET.getInputType() == 129) {
+                affichageMDP.setText(getString(R.string.cache_du_mdp));
+                affichageMDP.setTextColor(getColor(R.color.red));
+                passWord1ET.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                passWord2ET.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            } else {
+                affichageMDP.setText(getString(R.string.affichage_mdp));
+                affichageMDP.setTextColor(getColor(R.color.black));
+                passWord1ET.setInputType(129);
+                passWord2ET.setInputType(129);
+                Log.i(getString(R.string.TAG), "valeur type_text_password: " + InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                Log.i(getString(R.string.TAG), "valeur type_text_password: " + InputType.TYPE_TEXT_VARIATION_PASSWORD);
             }
         });
     }
 
     private void activationBoutonValider() {
-        validationChgtPassWord.setVisibility(View.VISIBLE);
-        validationChgtPassWord.setOnClickListener(this::changementDeMotDePasse);
+        View validation_caractere_mdp = findViewById(R.id.controle_mdp);
+        TextView validiteMPD = findViewById(R.id.validite_du_mdp);
+        if (passWord1OK) {
+            validiteMPD.setVisibility(View.VISIBLE);
+            validation_caractere_mdp.setVisibility(View.GONE);
+            if (passWord1.equals(passWord2)) {
+                validiteMPD.setVisibility(View.GONE);
+                validationChgtPassWord.setVisibility(View.VISIBLE);
+                validationChgtPassWord.setOnClickListener(this::changementDeMotDePasse);
+                passWord1EgalspassWord2 = true;
+            } else {
+                passWord1EgalspassWord2 = false;
+                validationChgtPassWord.setVisibility(View.GONE);
+                validationChgtPassWord.setOnClickListener(null);
+            }
+        } else {
+            validiteMPD.setVisibility(View.GONE);
+            validation_caractere_mdp.setVisibility(View.VISIBLE);
+        }
+
     }
 
     private void recupIntent() {
@@ -235,7 +270,6 @@ public class MajMDP extends AppCompatActivity {
 
     private void vueSaisieMdpActivation() {
         findViewById(R.id.RL_saisie_MDP).setVisibility(View.VISIBLE);
-
     }
 
     private void vueSaisieMdpDesactivation() {

@@ -210,14 +210,15 @@ public class AjoutDeLieu extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!s.toString().isEmpty()) {
+                if (s.toString().length()>4) {
                     nomLieuBoolean = true;
-                    nomLieu =((TextView) nameLieu).getText().toString();
-                    controleLieuValidation();
+                    nameLieu.setTextColor(getColor(R.color.black));
+                    nomLieu = nameLieu.getText().toString();
                 } else {
+                    nameLieu.setTextColor(getColor(R.color.red));
                     nomLieuBoolean = false;
-                    controleLieuValidation();
                 }
+                controleLieuValidation();
             }
         });
         adresseLieuET.addTextChangedListener(new TextWatcher() {
@@ -233,11 +234,13 @@ public class AjoutDeLieu extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!s.toString().isEmpty()) {
+                if (s.toString().length()>6) {
                     adresseLieuBoolean = true;
+                    adresseLieuET.setTextColor(getColor(R.color.black));
                     adresseLieu = adresseLieuET.getText().toString();
                     controleLieuValidation();
                 } else {
+                    adresseLieuET.setTextColor(getColor(R.color.red));
                     adresseLieuBoolean = false;
                     controleLieuValidation();
                 }
@@ -256,7 +259,7 @@ public class AjoutDeLieu extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.toString().length() > 4) {
+                if (s.toString().length() > 3) {
                     CPLieu.setTextColor(getColor(R.color.black));
                     CPLieuBoolean = true;
                     codePostalLieu = Integer.parseInt(CPLieu.getText().toString());
@@ -281,11 +284,13 @@ public class AjoutDeLieu extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!s.toString().isEmpty()) {
+                if (s.toString().length()>2) {
                     villeLieuBoolean = true;
+                    villeLieuET.setTextColor(getColor(R.color.black));
                     villeLieu = villeLieuET.getText().toString();
                     controleLieuValidation();
                 } else {
+                    villeLieuET.setTextColor(getColor(R.color.red));
                     villeLieuBoolean = false;
                     controleLieuValidation();
                 }

@@ -85,4 +85,6 @@
     <string name="text_de_base">Bae Text</string>
     <string name="suppressionGPS">Attention, désactivation du GPS</string>
     <string name="activationGPS">GPS actived</string>
+    <string name="affichage_mdp">Show pass word</string>
+    <string name="cache_du_mdp">Hidden pass word</string>
 </resources>

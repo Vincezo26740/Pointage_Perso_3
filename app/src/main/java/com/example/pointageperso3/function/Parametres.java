@@ -285,9 +285,11 @@ public class Parametres extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (!name.getText().toString().isEmpty()) {
+                    name.setTextColor(getColor(R.color.black));
                     nameUserOk = true;
                     controleValidationVisible();
                 } else {
+                    name.setTextColor(getColor(R.color.red));
                     nameUserOk = false;
                     controleValidationVisible();
                 }
@@ -306,10 +308,12 @@ public class Parametres extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!adresse.getText().toString().isEmpty()) {
+                if (s.toString().length() > 4) {
+                    adresse.setTextColor(getColor(R.color.black));
                     adresseUserOk = true;
                     controleValidationVisible();
                 } else {
+                    adresse.setTextColor(getColor(R.color.red));
                     adresseUserOk = false;
                     controleValidationVisible();
                 }
@@ -352,13 +356,14 @@ public class Parametres extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!town.getText().toString().isEmpty()) {
+                if (s.toString().length() > 3) {
+                    town.setTextColor(getColor(R.color.black));
                     villeUserOk = true;
-                    controleValidationVisible();
                 } else {
+                    town.setTextColor(getColor(R.color.red));
                     villeUserOk = false;
-                    controleValidationVisible();
                 }
+                controleValidationVisible();
             }
         });
         email.addTextChangedListener(new TextWatcher() {
@@ -377,16 +382,15 @@ public class Parametres extends AppCompatActivity {
                 Pattern paternRegexMail = Pattern.compile("([a-zA-Z0-9_-]+)((\\.)([a-zA-Z0-9_-]*))*@([a-zA-Z0-9_-]+)(\\.)+([a-zA-Z0-9_]{2,4})");
                 Matcher matcher;
                 matcher = paternRegexMail.matcher(s);
-                if (!s.toString().isEmpty()) {
-                    if (matcher.matches()) {
-                        email.setTextColor(getColor(R.color.black));
-                        emailUserOK = true;
-                        controleValidationVisible();
-                    } else {
-                        emailUserOK = false;
-                        email.setTextColor(getColor(R.color.red));
-                    }
+                if (matcher.matches()) {
+                    email.setTextColor(getColor(R.color.black));
+                    emailUserOK = true;
+
+                } else {
+                    emailUserOK = false;
+                    email.setTextColor(getColor(R.color.red));
                 }
+                controleValidationVisible();
             }
         });
         prenom.addTextChangedListener(new TextWatcher() {
@@ -402,17 +406,14 @@ public class Parametres extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
-                if (!prenom.getText().toString().isEmpty()) {
+                if (s.toString().length() > 2) {
                     prenom.setTextColor(getColor(R.color.black));
                     prenomUserOk = true;
-                    controleValidationVisible();
-
                 } else {
                     prenomUserOk = false;
                     prenom.setTextColor(getColor(R.color.red));
-                    controleValidationVisible();
                 }
+                controleValidationVisible();
             }
         });
     }
@@ -548,13 +549,14 @@ public class Parametres extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!nameSociete.getText().toString().isEmpty()) {
+                if (s.toString().length() > 4) {
+                    nameSociete.setTextColor(getColor(R.color.black));
                     nameOk = true;
-                    controleModifText();
                 } else {
+                    nameSociete.setTextColor(getColor(R.color.red));
                     nameOk = false;
-                    controleModifText();
                 }
+                controleModifText();
             }
         });
         adresseSociete.addTextChangedListener(new TextWatcher() {
@@ -570,13 +572,14 @@ public class Parametres extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!adresseSociete.getText().toString().isEmpty()) {
+                if (s.toString().length() > 4) {
+                    adresseSociete.setTextColor(getColor(R.color.black));
                     adresseOk = true;
-                    controleModifText();
                 } else {
+                    adresseSociete.setTextColor(getColor(R.color.red));
                     adresseOk = false;
-                    controleModifText();
                 }
+                controleModifText();
             }
         });
         CPSociete.addTextChangedListener(new TextWatcher() {
@@ -595,12 +598,11 @@ public class Parametres extends AppCompatActivity {
                 if ((s.length() > 4)) {
                     CPSociete.setTextColor(getColor(R.color.black));
                     CPOk = true;
-                    controleModifText();
                 } else {
                     CPSociete.setTextColor(getColor(R.color.red));
                     CPOk = false;
-                    controleModifText();
                 }
+                controleModifText();
             }
         });
         townSociete.addTextChangedListener(new TextWatcher() {
@@ -616,13 +618,14 @@ public class Parametres extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!townSociete.getText().toString().isEmpty()) {
+                if (s.toString().length() > 3) {
+                    townSociete.setTextColor(getColor(R.color.black));
                     villeOk = true;
-                    controleModifText();
                 } else {
+                    townSociete.setTextColor(getColor(R.color.red));
                     villeOk = false;
-                    controleModifText();
                 }
+                controleModifText();
             }
         });
         mail1.addTextChangedListener(new TextWatcher() {
@@ -641,16 +644,14 @@ public class Parametres extends AppCompatActivity {
                 Pattern paternRegexMail = Pattern.compile("([a-zA-Z0-9_-]+)((\\.)([a-zA-Z0-9_-]*))*@([a-zA-Z0-9_-]+)(\\.)+([a-zA-Z0-9_]{2,4})");
                 Matcher matcher;
                 matcher = paternRegexMail.matcher(s);
-                if (!s.toString().isEmpty()) {
-                    if (matcher.matches()) {
-                        mail1.setTextColor(getColor(R.color.black));
-                        email1OK = true;
-                        controleModifText();
-                    } else {
-                        email1OK = false;
-                        mail1.setTextColor(getColor(R.color.red));
-                    }
+                if (matcher.matches()) {
+                    mail1.setTextColor(getColor(R.color.black));
+                    email1OK = true;
+                } else {
+                    email1OK = false;
+                    mail1.setTextColor(getColor(R.color.red));
                 }
+                controleModifText();
             }
         });
         mail2.addTextChangedListener(new TextWatcher() {
@@ -672,15 +673,11 @@ public class Parametres extends AppCompatActivity {
                 if (matcher.matches()) {
                     mail2.setTextColor(getColor(R.color.black));
                     email2OK = true;
-                    controleModifText();
-                } else if (s.toString().isEmpty()) {
-                    email2OK = true;
-                    controleModifText();
                 } else {
                     email2OK = false;
                     mail2.setTextColor(getColor(R.color.red));
-                    controleModifText();
                 }
+                controleModifText();
             }
         });
         mail3.addTextChangedListener(new TextWatcher() {
@@ -692,15 +689,11 @@ public class Parametres extends AppCompatActivity {
                 if (matcher.matches()) {
                     mail3.setTextColor(getColor(R.color.black));
                     email3OK = true;
-                    controleModifText();
-                } else if (s.toString().isEmpty()) {
-                    email3OK = true;
-                    controleModifText();
                 } else {
                     email3OK = false;
                     mail3.setTextColor(getColor(R.color.red));
-                    controleModifText();
                 }
+                controleModifText();
             }
 
             @Override
@@ -716,15 +709,11 @@ public class Parametres extends AppCompatActivity {
                 if (matcher.matches()) {
                     mail3.setTextColor(getColor(R.color.black));
                     email3OK = true;
-                    controleModifText();
-                } else if (s.toString().isEmpty()) {
-                    email3OK = true;
-                    controleModifText();
                 } else {
                     email3OK = false;
                     mail3.setTextColor(getColor(R.color.red));
-                    controleModifText();
                 }
+                controleModifText();
             }
         });
     }

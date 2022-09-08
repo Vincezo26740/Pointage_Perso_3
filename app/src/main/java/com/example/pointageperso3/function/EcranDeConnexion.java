@@ -51,7 +51,7 @@ public class EcranDeConnexion extends AppCompatActivity {
 
 
     // Gestion de la vue création nouvel utilisateur
-    private TextView nameNewUser,prenomNewUser, emailNewUser, adresseNewUser, villeNewUser, CPNewUser;
+    private TextView nameNewUser, prenomNewUser, emailNewUser, adresseNewUser, villeNewUser, CPNewUser;
     private boolean nameOk, emailOK, adresseOk, CPOk, villeOk;
     private Button validationNewUser;
 
@@ -129,7 +129,13 @@ public class EcranDeConnexion extends AppCompatActivity {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    nameUserOk = !s.toString().isEmpty();
+                    if (name.getText().length() > 3) {
+                        nameUserOk = true;
+                        name.setTextColor(getColor(R.color.black));
+                    } else {
+                        nameUserOk = false;
+                        name.setTextColor(getColor(R.color.red));
+                    }
                 }
             });
 
@@ -145,7 +151,14 @@ public class EcranDeConnexion extends AppCompatActivity {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    passWordUserOk = !s.toString().isEmpty();
+                    if (passWord.getText().length() > 7) {
+                        passWordUserOk = true;
+                        passWord.setTextColor(getColor(R.color.black));
+                    } else {
+                        passWordUserOk = false;
+                        passWord.setTextColor(getColor(R.color.red));
+                    }
+
                 }
             });
 
@@ -212,7 +225,7 @@ public class EcranDeConnexion extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!s.toString().isEmpty()) {
+                if (s.toString().length() > 2) {
                     nameOk = true;
                     controleModifText();
                 }
@@ -233,7 +246,7 @@ public class EcranDeConnexion extends AppCompatActivity {
                 Pattern paternRegexMail = Pattern.compile("([a-zA-Z0-9_-]+)((\\.)([a-zA-Z0-9_-]*))*@([a-zA-Z0-9_-]+)(\\.)+([a-zA-Z0-9_]{2,4})");
                 Matcher matcher;
                 matcher = paternRegexMail.matcher(s);
-                if (!s.toString().isEmpty()) {
+                if (s.toString().length() > 5) {
                     if (matcher.matches()) {
                         emailNewUser.setTextColor(getColor(R.color.black));
                         emailOK = true;
@@ -257,7 +270,7 @@ public class EcranDeConnexion extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!s.toString().isEmpty()) {
+                if (s.toString().length() > 4) {
                     adresseOk = true;
                     controleModifText();
                 }
@@ -301,7 +314,7 @@ public class EcranDeConnexion extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!s.toString().isEmpty()) {
+                if (s.toString().length() > 3) {
                     villeOk = true;
                     controleModifText();
                 }
@@ -346,8 +359,8 @@ public class EcranDeConnexion extends AppCompatActivity {
     public void ValidationUser(View view) {
         validationUser.setClickable(false);
         validationUser.setOnClickListener(null);
-        nameUser = escapeHtml(((TextView)findViewById(R.id.et_username)).getText().toString());
-        passWordUser = ((TextView)findViewById(R.id.et_mdp)).getText().toString();
+        nameUser = escapeHtml(((TextView) findViewById(R.id.et_username)).getText().toString());
+        passWordUser = ((TextView) findViewById(R.id.et_mdp)).getText().toString();
 
         if (nameUser.isEmpty() || passWordUser.isEmpty()) {
             erreurConnexion = true;

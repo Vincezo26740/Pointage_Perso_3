@@ -36,7 +36,7 @@
     <string name="ville">Ville</string>
     <string name="changement_de_mot_de_passe">Changement de mot de passe</string>
     <string name="nom_de_l_utilisateur_du_compte">Nom de l\'utilisateur du compte</string>
-    <string name="validation_du_mot_de_passe">Validation du mot de passe</string>
+    <string name="validation_du_mot_de_passe">Validité du 1er mot de passe</string>
     <string name="REGEX_longeur_de_mot">Longeur de mot</string>
     <string name="REGEX_2_caract_res_speciaux">2 caractères speciaux</string>
     <string name="REGEX_2_majuscules">2 majuscules</string>
@@ -95,4 +95,6 @@
     <string name="text_de_base">text de base</string>
     <string name="suppressionGPS">Attention, désactivation du GPS</string>
     <string name="activationGPS">Activation du GPS</string>
+    <string name="affichage_mdp">Affichage des mots de passe</string>
+    <string name="cache_du_mdp">Cache des mots de passe</string>
 </resources>
