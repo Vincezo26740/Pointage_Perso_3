@@ -73,8 +73,8 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
     private Pointage pointageActuel, dernierEnregistrement;
     private Date date;
 
-
-//    private ArrayList<Pointage> listPointage;
+    LocationManager locationManager;
+    //    private ArrayList<Pointage> listPointage;
     private final SimpleDateFormat formatagedate = new SimpleDateFormat("dd MMMM yyyy HH:mm:ss", Locale.FRANCE);
 
     double latitude, longitude;
@@ -166,8 +166,8 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
     protected void onResume() {
         recupIntent();
         super.onResume();
-//        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);    //Géo-localisation
-        LocationManager locationManager ;    //Géo-localisation
+        //Géo-localisation
+//        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);    //Géo-localisation
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{AUTORISATIONGPSFIN, AUTORISATIONGPSCOARSE}, REQUESTCODEVALUE);
@@ -626,7 +626,12 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
         pointageActuel.setLatitude(latitude);
         pointageActuel.setLongitude(longitude);
         //Géo-localisation
-
+        if (recupDernierPointage.getLatitude() != pointageActuel.getLatitude()) {
+            pointageActuel.setLatitude(recupDernierPointage.getLatitude());
+        }
+        if (recupDernierPointage.getLongitude() != pointageActuel.getLongitude()) {
+            pointageActuel.setLongitude(longitude);
+        }
         if (latitude == 0 && longitude == 0) {
             if (recupDernierPointage != null) {
                 commentaires = getString(R.string.a_controler) + " \n " + commentaires;
@@ -763,7 +768,7 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
 //        int compteur = 20;
 //        boolean fin = false;
         try {
-           fermetureFenetreToast.await(20, TimeUnit.SECONDS);
+            fermetureFenetreToast.await(20, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
