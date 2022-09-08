@@ -7,7 +7,6 @@ import android.icu.text.SimpleDateFormat;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -53,20 +52,18 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
 
     // Récupération Intent
     private String user;
-    private String password;
-    private String classInit;
-    private String classEchec;
-    private String classReussite;
     private String fonction;
 
-    private CountDownLatch retourUser, retourConfig, retourDernierPointage;
+//    private CountDownLatch retourUser, retourConfig, retourDernierPointage;
 
-    private TextView title, tvDernierPointage, commentairesTV;
-    private Button absence, debutPointageButton, finPointageButton,
-            parametres, creationFichier, validationPointage,
-            retour, checkPointage = null, nouveauLieu;
+    private TextView tvDernierPointage;
+    private TextView commentairesTV;
+    private Button validationPointage;
+    private Button retour;
+    private Button checkPointage = null;
 
-    private String bienvenueUser, commentaires = "", typeAcces;
+    private String commentaires = "";
+    private String typeAcces;
     private String[][] dataRecycler;
     private StringBuilder pointagePrecedent;
 
@@ -77,23 +74,19 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
     private Date date;
 
 
-    private ArrayList<Pointage> listPointage;
+//    private ArrayList<Pointage> listPointage;
     private final SimpleDateFormat formatagedate = new SimpleDateFormat("dd MMMM yyyy HH:mm:ss", Locale.FRANCE);
 
-    private LocationManager locationManager;
     double latitude, longitude;
 
-    private boolean fonctionUsed;
-
-    private Pointage dernierPointage;
+//    private boolean fonctionUsed;
+//
+//    private Pointage dernierPointage;
 
     //****************//
 //    User utilisateur;
     private Societe societe;
-    private ConfigAppli confAppli;
-    private ArrayList<User> listeDesUtilisateurs;
     private ArrayList<Pointage> listeDePointages;
-    private ArrayList<Lieu> listeDeLieux;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -104,10 +97,10 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
 
     private void recupIntent() {
         user = getIntent().getStringExtra("user");
-        password = getIntent().getStringExtra("password");
-        classInit = getIntent().getStringExtra("class");
-        classEchec = getIntent().getStringExtra("classEchec");
-        classReussite = getIntent().getStringExtra("classReussite");
+        String password = getIntent().getStringExtra("password");
+        String classInit = getIntent().getStringExtra("class");
+        String classEchec = getIntent().getStringExtra("classEchec");
+        String classReussite = getIntent().getStringExtra("classReussite");
         fonction = getIntent().getStringExtra("fonction");
     }
 
@@ -173,7 +166,7 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
     protected void onResume() {
         recupIntent();
         super.onResume();
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);    //Géo-localisation
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);    //Géo-localisation
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{AUTORISATIONGPSFIN, AUTORISATIONGPSCOARSE}, REQUESTCODEVALUE);
@@ -195,10 +188,10 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
             e.printStackTrace();
         }
 
-        bienvenueUser = getString(R.string.pointage_de) + " \n" + utilisateur.getFirstName();
+        String bienvenueUser = getString(R.string.pointage_de) + " \n" + utilisateur.getFirstName();
         setContentView(R.layout.accueil);
 
-        title = findViewById(R.id.tv_title_pointage);
+        TextView title = findViewById(R.id.tv_title_pointage);
         title.setText(bienvenueUser);
         activationBouton();
         if (fonction.equals("envoieEmail")) {
@@ -210,14 +203,14 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
         retour = findViewById(R.id.btn_Retour);
         retour.setOnClickListener(this::pagePrecedente);
 
-        absence = findViewById(R.id.btn_pointage_absence);
+        Button absence = findViewById(R.id.btn_pointage_absence);
         absence.setOnClickListener(this::declarationAbsence);
 
         checkPointage = findViewById(R.id.btn_CtrlPointage);
         checkPointage.setOnClickListener(this::lecturePointages);
 
-        debutPointageButton = findViewById(R.id.btn_pointage_debut);
-        finPointageButton = findViewById(R.id.btn_pointage_fin);
+        Button debutPointageButton = findViewById(R.id.btn_pointage_debut);
+        Button finPointageButton = findViewById(R.id.btn_pointage_fin);
         if (listeDePointages.size() > 0) {
             if (listeDePointages.get(0).getDateFin() != 0) {
                 debutPointageButton.setVisibility(View.VISIBLE);
@@ -238,10 +231,10 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
         }
 
 
-        parametres = findViewById(R.id.btn_Parametres);
+        Button parametres = findViewById(R.id.btn_Parametres);
         parametres.setOnClickListener(this::parametres);
 
-        creationFichier = findViewById(R.id.btn_CtrlPointage2);
+        Button creationFichier = findViewById(R.id.btn_CtrlPointage2);
         creationFichier.setOnClickListener(this::envoieEmail);
     }
 
@@ -285,10 +278,10 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
 
             startActivity(renvoieVersLaPageDeParametreDeLaSociete);
         } else {
-            confAppli = DonneesDeLApplication.getConfAppli();
-            listeDesUtilisateurs = DonneesDeLApplication.getListeDesUtilisateurs();
+//            confAppli = DonneesDeLApplication.getConfAppli();
+//            listeDesUtilisateurs = DonneesDeLApplication.getListeDesUtilisateurs();
             listeDePointages = DonneesDeLApplication.getListeDePointages();
-            listeDeLieux = DonneesDeLApplication.getListeDeLieux();
+//            listeDeLieux = DonneesDeLApplication.getListeDeLieux();
             try {
                 majAttente.await();
             } catch (InterruptedException e) {
@@ -522,7 +515,7 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
             case 1:
                 setContentView(R.layout.pointage_detail_endroit);
                 findViewById(R.id.btn_Retour).setOnClickListener(this::debutPointage);
-                nouveauLieu = findViewById(R.id.ajout_lieu);
+                Button nouveauLieu = findViewById(R.id.ajout_lieu);
                 nouveauLieu.setOnClickListener(this::ajoutLieuListe);
                 selectionLieuRecyclerView();
                 break;
@@ -568,7 +561,6 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
         pagePrecedente.putExtra("classEchec", "");
         pagePrecedente.putExtra("classReussite", "");
         pagePrecedente.putExtra("fonction", "");
-
         pagePrecedente.putExtra("typeAcces", typeAcces);
 
         startActivity(pagePrecedente);
@@ -753,10 +745,10 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
         new Thread(majInfosAppli).start();
         utilisateur = DonneesDeLApplication.getUtilisateur();
         societe = DonneesDeLApplication.getSociete();
-        confAppli = DonneesDeLApplication.getConfAppli();
-        listeDesUtilisateurs = DonneesDeLApplication.getListeDesUtilisateurs();
+        ConfigAppli confAppli = DonneesDeLApplication.getConfAppli();
+        ArrayList<User> listeDesUtilisateurs = DonneesDeLApplication.getListeDesUtilisateurs();
         listeDePointages = DonneesDeLApplication.getListeDePointages();
-        listeDeLieux = DonneesDeLApplication.getListeDeLieux();
+        ArrayList<Lieu> listeDeLieux = DonneesDeLApplication.getListeDeLieux();
         try {
             majAttente.await();
         } catch (InterruptedException e) {
@@ -796,13 +788,13 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
     @Override
     public void onProviderDisabled(@NonNull String provider) {
 //        LocationListener.super.onProviderDisabled(provider);
-        Log.i(getString(R.string.TAG), "onProviderDisabled: ");
+//        Log.i(getString(R.string.TAG), "onProviderDisabled: ");
     }
 
     @Override
     public void onProviderEnabled(@NonNull String provider) {
 //        LocationListener.super.onProviderEnabled(provider);
-        Log.i(getString(R.string.TAG), "onProviderEnabled: ");
+//        Log.i(getString(R.string.TAG), "onProviderEnabled: ");
     }
     //Géo-localisation
 
