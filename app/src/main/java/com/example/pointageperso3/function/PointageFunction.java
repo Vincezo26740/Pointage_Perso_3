@@ -52,7 +52,12 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
 
 
     // Récupération Intent
-    private String user, password, classInit, classEchec, classReussite, fonction;
+    private String user;
+    private String password;
+    private String classInit;
+    private String classEchec;
+    private String classReussite;
+    private String fonction;
 
     private CountDownLatch retourUser, retourConfig, retourDernierPointage;
 
@@ -261,7 +266,7 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
 
         File path = EnvoieMail.getPathFichier();
         String messageText = getString(R.string.corps_fichier_csv) + user;
-        Uri uriPath = Uri.fromFile(path);
+//        Uri uriPath = Uri.fromFile(path);
 
         CountDownLatch majAttente = new CountDownLatch(6);
         ImportBDDInfos majInfosAppli = new ImportBDDInfos(majAttente);
@@ -582,8 +587,8 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
         rv.setAdapter(RCVP);
     }));
 
-    private void selectionFournisseurRecyclerview() {
-    }
+//    private void selectionFournisseurRecyclerview() {
+//    }
 
     ArrayList<Lieu> tableauLieuPointage;
 
@@ -672,18 +677,16 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
                     dernierEnregistrement.setDateFin(pointageActuel.getDateDebut());
                     dernierEnregistrement.setCommentaires(commentaires);
                     BDD.DaoPointage().update(dernierEnregistrement);
-                    BDD.close();
                 } else {
                     if (pointageActuel.getEtatPointage() != 1) {
                         pointageActuel.setDateFin(pointageActuel.getDateDebut() + 1);
                     }
                     BDD.DaoPointage().insertPointageEntity(pointageActuel);
-                    BDD.close();
                 }
             } else {
                 BDD.DaoPointage().insertPointageEntity(pointageActuel);
-                BDD.close();
             }
+            BDD.close();
 
             majInfoBdd = new CountDownLatch(1);
             new Thread(majInfoAppli).start();
@@ -714,8 +717,8 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
             //connexion BDD
 
             int indice = listeDePointages.size() - 1; // mise en place d'un indice pour contrôle sur les pointages suivants
-            SimpleDateFormat formatagedate = new SimpleDateFormat("dd MMMM yyyy HH:mm:ss", Locale.FRANCE);
-            SimpleDateFormat formatagedate2 = new SimpleDateFormat("dd MMMM yyyy", Locale.FRANCE);
+//            SimpleDateFormat formatagedate = new SimpleDateFormat("dd MMMM yyyy HH:mm:ss", Locale.FRANCE);
+//            SimpleDateFormat formatagedate2 = new SimpleDateFormat("dd MMMM yyyy", Locale.FRANCE);
 
             // *****************           LECTURE DES INFOS BDD           ****************************
             for (int i = 0; i <= indice; i++) {
@@ -764,10 +767,10 @@ public class PointageFunction extends AppCompatActivity implements RecyclerView_
 
     //Thread durée affichage pointage
     Thread toastCompteur = new Thread(() -> {
-        int compteur = 20;
-        boolean fin = false;
+//        int compteur = 20;
+//        boolean fin = false;
         try {
-            boolean await = fermetureFenetreToast.await(20, TimeUnit.SECONDS);
+           fermetureFenetreToast.await(20, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
