@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.pointageperso3">
+    package="fr.LCB.pointageperso3"
+    >
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -15,12 +16,13 @@
     <uses-permission android:name="android.permission.READ_PHONE_NUMBERS"/>
 
     <application
-        android:name=".function.MonAppContext"
+        android:name="fr.LCB.pointageperso3.function.MonAppContext"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/nom_application"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PointagePerso3"
@@ -29,7 +31,7 @@
         <!--        Provider pour l'échange de fichier lors d'un Intent sur les mail-->
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.pointageperso3.provider"
+            android:authorities="fr.LCB.pointageperso3.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -38,7 +40,7 @@
         </provider>
 
         <activity
-            android:name=".function.Chargement_appli"
+            android:name="fr.LCB.pointageperso3.function.Chargement_appli"
             android:exported="true"
             android:rotationAnimation="rotate"
             android:screenOrientation="sensorPortrait"
@@ -50,35 +52,35 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".function.PointageFunction"
+            android:name="fr.LCB.pointageperso3.function.PointageFunction"
             android:exported="true"
             android:rotationAnimation="rotate"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".function.Parametres"
+            android:name="fr.LCB.pointageperso3.function.Parametres"
             android:exported="true"
             android:rotationAnimation="rotate"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".function.EcranDeConnexion"
+            android:name="fr.LCB.pointageperso3.function.EcranDeConnexion"
             android:exported="true"
             android:rotationAnimation="rotate"
             android:screenOrientation="sensorPortrait" />
 
         <activity
-            android:name=".function.MajMDP"
+            android:name="fr.LCB.pointageperso3.function.MajMDP"
             android:exported="true"
             android:rotationAnimation="rotate"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".function.AjoutDeLieu"
+            android:name="fr.LCB.pointageperso3.function.AjoutDeLieu"
             android:exported="true"
             android:rotationAnimation="rotate"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".function.Attente_affichage"
+            android:name="fr.LCB.pointageperso3.function.Attente_affichage"
             android:exported="true"
             android:rotationAnimation="rotate"
             android:screenOrientation="sensorPortrait" />

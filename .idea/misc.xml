@@ -1,0 +1,23 @@
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/vince/AndroidStudioProjects/PointagePerso3/app/src/main/res/layout/abscence_autre_detatil.xml" value="0.358695652173913" />
+        <entry key="..\:/Users/vince/AndroidStudioProjects/PointagePerso3/app/src/main/res/layout/abscence_pointage.xml" value="0.358695652173913" />
+        <entry key="..\:/Users/vince/AndroidStudioProjects/PointagePerso3/app/src/main/res/layout/accueil.xml" value="0.3625" />
+        <entry key="..\:/Users/vince/AndroidStudioProjects/PointagePerso3/app/src/main/res/layout/chargement_application_values.xml" value="0.358695652173913" />
+        <entry key="..\:/Users/vince/AndroidStudioProjects/PointagePerso3/app/src/main/res/layout/chgt_mdp.xml" value="0.3625" />
+        <entry key="..\:/Users/vince/AndroidStudioProjects/PointagePerso3/app/src/main/res/layout/page_de_connexion.xml" value="0.1" />
+        <entry key="..\:/Users/vince/AndroidStudioProjects/PointagePerso3/app/src/main/res/layout/parametrage_application.xml" value="0.3625" />
+        <entry key="..\:/Users/vince/AndroidStudioProjects/PointagePerso3/app/src/main/res/layout/pointage_fin.xml" value="0.33" />
+        <entry key="..\:/Users/vince/AndroidStudioProjects/PointagePerso3/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2985" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="adopt-11" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
